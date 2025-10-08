@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>レポート - People X</title>
+    <title>面接結果レポート</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
     <script>
@@ -35,307 +35,422 @@
     <script src="i18n.js"></script>
     <script src="sidebar.js"></script>
 
+    <!-- Interview Detail Modal -->
+    <div id="interviewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4">
+            <!-- Modal Header -->
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-xl">
+                <h2 class="text-xl font-semibold text-gray-900" data-i18n="interviewReportDetail"></h2>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
 
-    <!-- Main Content -->
-    <main class="ml-60 min-h-screen">
-        <header class="bg-white border-b border-gray-200 px-8 py-6">
-            <h1 class="text-2xl font-semibold text-gray-900" data-i18n="interviewReport"></h1>
-            <p class="text-sm text-gray-500 mt-1" data-i18n="interviewReportDesc"></p>
-        </header>
+            <!-- Modal Content -->
+            <div class="p-6">
+                <!-- Applicant Info -->
+                <div class="mb-6">
+                    <h3 id="modalApplicantName" class="text-lg font-medium text-gray-900 mb-4"></h3>
 
-        <div class="p-8">
-            <!-- Stats Overview -->
-            <div class="grid grid-cols-4 gap-6 mb-8">
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <div class="flex items-center justify-between">
+                    <div class="grid grid-cols-2 gap-6">
                         <div>
-                            <p class="text-sm text-gray-500" data-i18n="totalInterviews"></p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">127</p>
+                            <p class="text-sm text-gray-600 mb-1" data-i18n="interviewDate"></p>
+                            <p id="modalInterviewDate" class="text-base font-medium text-gray-900"></p>
                         </div>
-                        <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
-                            </svg>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1" data-i18n="time"></p>
+                            <p id="modalInterviewTime" class="text-base font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1" data-i18n="overallScore"></p>
+                            <p id="modalOverallScore" class="text-2xl font-bold text-green-600"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1" data-i18n="rating"></p>
+                            <span id="modalRating" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"></span>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <div class="flex items-center justify-between">
+                <!-- Tab Navigation -->
+                <div class="flex gap-0 border-b border-gray-200 mb-6">
+                    <button class="tab-btn active flex-1 px-6 py-3 text-sm font-medium bg-white border-t border-l border-r border-gray-200 rounded-t-lg text-gray-900 -mb-px" data-tab="analysis" data-i18n="aiAnalysis"></button>
+                    <button class="tab-btn flex-1 px-6 py-3 text-sm font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 border-b border-gray-200" data-tab="evaluation" data-i18n="overallEvaluation"></button>
+                    <button class="tab-btn flex-1 px-6 py-3 text-sm font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 border-b border-gray-200" data-tab="content" data-i18n="interviewContent"></button>
+                </div>
+
+                <!-- Tab Content: AI Analysis -->
+                <div id="tab-analysis" class="tab-content">
+                    <h4 class="text-base font-semibold text-gray-900 mb-6" data-i18n="abilityEvaluation"></h4>
+
+                    <!-- Ability Bars -->
+                    <div class="space-y-6">
                         <div>
-                            <p class="text-sm text-gray-500" data-i18n="averageRating"></p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">73.5</p>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-normal text-gray-900" data-i18n="communicationSkills"></span>
+                                <span class="text-sm font-bold text-gray-900">92点</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#312e81] h-2.5 rounded-full" style="width: 92%"></div>
+                            </div>
                         </div>
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-                            </svg>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-normal text-gray-900" data-i18n="technicalSkills"></span>
+                                <span class="text-sm font-bold text-gray-900">85点</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#312e81] h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-normal text-gray-900" data-i18n="problemSolving"></span>
+                                <span class="text-sm font-bold text-gray-900">85点</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#312e81] h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-normal text-gray-900" data-i18n="cultureFit"></span>
+                                <span class="text-sm font-bold text-gray-900">90点</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#312e81] h-2.5 rounded-full" style="width: 90%"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500" data-i18n="hiredCount"></p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">32</p>
-                        </div>
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
+                <!-- Tab Content: Overall Evaluation -->
+                <div id="tab-evaluation" class="tab-content hidden">
+                    <!-- Overall Text -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="overallEvaluationText"></h4>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            非常に優秀な候補者です。明るく元気な接客態度で、お客様とのコミュニケーション能力が高いです。小売業での経験も豊富で、即戦力として活躍できる人材です。
+                        </p>
+                    </div>
+
+                    <!-- Strengths -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="strengths"></h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>明るく元気な接客態度</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>小売店での2年間の実務経験</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>高いコミュニケーション能力</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>シフトの柔軟な対応が可能</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>チームワークを大切にする姿勢</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Concerns -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="concerns"></h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>ドラッグストアでの経験がない</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>医薬品知識が限定的</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Recommendation -->
+                    <div class="bg-primary-50 rounded-lg p-4">
+                        <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="recommendation"></h4>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            強く推薦します。接客スキルが高く、チームに良い影響を与えられる人材です。
+                        </p>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500" data-i18n="rejectedCount"></p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">45</p>
+                <!-- Tab Content: Interview Content -->
+                <div id="tab-content" class="tab-content hidden">
+                    <h4 class="text-sm text-gray-600 mb-4" data-i18n="questionAndAnswer"></h4>
+
+                    <!-- Questions Container with max height and scroll -->
+                    <div class="space-y-6 max-h-[400px] overflow-y-auto pr-2">
+                        <!-- Question 1 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 1</h5>
+                                <span class="text-sm text-gray-500">90点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">自己紹介をお願いします</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                はい、岡本拓也と申します。現在大学3年生で、小売店でアルバイトを2年間続けています。お客様と接することが好きで、笑顔で元気な接客を心がけています。
+                            </p>
                         </div>
-                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
+
+                        <!-- Question 2 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 2</h5>
+                                <span class="text-sm text-gray-500">88点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">小売業での経験について教えてください</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                小売店で2年間販売スタッフとして働いています。接客、商品陳列、在庫管理など一通りの業務を経験しました。特に忙しい時間帯は、効率的な動きとチームワークが重要だと学びました。
+                            </p>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 3</h5>
+                                <span class="text-sm text-gray-500">92点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">お客様対応で大切にしていることは何ですか？</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                笑顔と元気な挨拶を心がけています。お客様の表情や様子を見て、必要なタイミングでお声がけすることも大切だと思います。また、お客様の要望には迅速に対応するように心がけています。
+                            </p>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 4</h5>
+                                <span class="text-sm text-gray-500">80点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">医薬品の知識はありますか？</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                専門的な知識はまだありませんが、入社後にしっかり学んで、お客様に適切なアドバイスができるようになりたいです。
+                            </p>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 5</h5>
+                                <span class="text-sm text-gray-500">95点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">シフトの希望はありますか？</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                平日の夕方以降と週末は入れます。学業との両立を考えていますが、繁忙期などは柔軟に対応できます。
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Recent Reports -->
-            <div class="bg-white rounded-lg border border-gray-200">
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <h2 class="text-lg font-semibold text-gray-900">最新のレポート</h2>
+    <!-- Main Content -->
+    <main class="ml-60 min-h-screen">
+        <header class="bg-white border-b border-gray-200 px-8 py-6">
+            <h1 class="text-2xl font-semibold text-gray-900" data-i18n="interviewResultReport"></h1>
+            <p class="text-sm text-gray-500 mt-1" data-i18n="interviewResultReportDesc"></p>
+        </header>
+
+        <div class="p-8">
+            <!-- Stats Overview - 4 cards in a row -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <!-- Total Interviews -->
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-600" data-i18n="totalInterviewsCount"></p>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <p class="text-4xl font-bold text-gray-900">3</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="thisMonth"></p>
                 </div>
 
-                <div class="divide-y divide-gray-200">
-                    <!-- Report Item 1 -->
-                    <div class="p-6 hover:bg-gray-50 transition cursor-pointer">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900">岡本拓也</h3>
-                                    <span class="text-sm text-gray-500">フロントエンドエンジニア（新卒）</span>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">採用推奨</span>
-                                </div>
-                                <p class="text-sm text-gray-600 mb-3">面接日: 2024/10/12 | 面接官: AI面接システム</p>
-
-                                <!-- Score Breakdown -->
-                                <div class="grid grid-cols-4 gap-4 mb-4">
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">コミュニケーション</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-blue-500" style="width: 85%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">85</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">技術力</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-green-500" style="width: 78%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">78</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">問題解決力</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-purple-500" style="width: 82%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">82</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">カルチャーフィット</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-orange-500" style="width: 75%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">75</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- AI Summary -->
-                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <div class="flex items-start gap-2">
-                                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                        </svg>
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium text-blue-900 mb-1">AI分析サマリー</p>
-                                            <p class="text-sm text-blue-800">
-                                                技術的な基礎知識が豊富で、Reactの理解度が高い。コミュニケーション能力も優れており、チームワークを重視する姿勢が見られる。成長意欲が強く、新しい技術への学習姿勢も積極的。フロントエンド開発における実務経験は限られているが、ポテンシャルが非常に高いため、採用を強く推奨します。
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="ml-6 text-right">
-                                <div class="text-3xl font-bold text-gray-900 mb-1">80</div>
-                                <p class="text-xs text-gray-500">総合評価</p>
-                                <button class="mt-4 px-4 py-2 text-sm text-primary-600 hover:text-primary-700 border border-primary-600 rounded-lg hover:bg-primary-50 transition">
-                                    詳細を見る
-                                </button>
-                            </div>
-                        </div>
+                <!-- Average Score -->
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-600" data-i18n="averageScore"></p>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
                     </div>
+                    <p class="text-4xl font-bold text-gray-900">87<span class="text-lg" data-i18n="points"></span></p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="overallAverage"></p>
+                </div>
 
-                    <!-- Report Item 2 -->
-                    <div class="p-6 hover:bg-gray-50 transition cursor-pointer">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900">田中美奈子</h3>
-                                    <span class="text-sm text-gray-500">バックエンドエンジニア（アルバイト）</span>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">採用推奨</span>
-                                </div>
-                                <p class="text-sm text-gray-600 mb-3">面接日: 2024/10/12 | 面接官: AI面接システム</p>
-
-                                <div class="grid grid-cols-4 gap-4 mb-4">
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">コミュニケーション</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-blue-500" style="width: 80%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">80</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">技術力</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-green-500" style="width: 82%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">82</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">問題解決力</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-purple-500" style="width: 78%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">78</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">カルチャーフィット</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-orange-500" style="width: 80%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">80</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <div class="flex items-start gap-2">
-                                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                        </svg>
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium text-blue-900 mb-1">AI分析サマリー</p>
-                                            <p class="text-sm text-blue-800">
-                                                Node.jsとPythonの実務経験があり、データベース設計の知識も豊富。論理的思考力が高く、複雑な問題に対して体系的なアプローチができる。アルバイトとしての採用に最適な候補者です。
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="ml-6 text-right">
-                                <div class="text-3xl font-bold text-gray-900 mb-1">80</div>
-                                <p class="text-xs text-gray-500">総合評価</p>
-                                <button class="mt-4 px-4 py-2 text-sm text-primary-600 hover:text-primary-700 border border-primary-600 rounded-lg hover:bg-primary-50 transition">
-                                    詳細を見る
-                                </button>
-                            </div>
-                        </div>
+                <!-- Excellent Rating -->
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-600" data-i18n="excellentRating"></p>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
                     </div>
+                    <p class="text-4xl font-bold text-gray-900">2</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="recommendedCandidates"></p>
+                </div>
 
-                    <!-- Report Item 3 -->
-                    <div class="p-6 hover:bg-gray-50 transition cursor-pointer">
-                        <div class="flex items-start justify-between">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <h3 class="text-lg font-semibold text-gray-900">鈴木昌</h3>
-                                    <span class="text-sm text-gray-500">法務（中途）</span>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">高評価</span>
-                                </div>
-                                <p class="text-sm text-gray-600 mb-3">面接日: 2024/10/12 | 面接官: AI面接システム</p>
-
-                                <div class="grid grid-cols-4 gap-4 mb-4">
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">コミュニケーション</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-blue-500" style="width: 95%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">95</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">専門知識</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-green-500" style="width: 100%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">100</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">問題解決力</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-purple-500" style="width: 98%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">98</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p class="text-xs text-gray-500 mb-1">カルチャーフィット</p>
-                                        <div class="flex items-center gap-2">
-                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <div class="h-full bg-orange-500" style="width: 95%"></div>
-                                            </div>
-                                            <span class="text-sm font-semibold text-gray-900">95</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <div class="flex items-start gap-2">
-                                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                                        </svg>
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium text-blue-900 mb-1">AI分析サマリー</p>
-                                            <p class="text-sm text-blue-800">
-                                                法律事務所での豊富な実務経験があり、企業法務に精通している。契約書作成や法的リスク管理の知識が非常に高い。コンプライアンス意識が強く、即戦力として活躍できる優秀な候補者。即採用を推奨します。
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="ml-6 text-right">
-                                <div class="text-3xl font-bold text-gray-900 mb-1">100</div>
-                                <p class="text-xs text-gray-500">総合評価</p>
-                                <button class="mt-4 px-4 py-2 text-sm text-primary-600 hover:text-primary-700 border border-primary-600 rounded-lg hover:bg-primary-50 transition">
-                                    詳細を見る
-                                </button>
-                            </div>
-                        </div>
+                <!-- Average Interview Time -->
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-600" data-i18n="averageInterviewTime"></p>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
                     </div>
+                    <p class="text-4xl font-bold text-gray-900">25<span class="text-lg" data-i18n="minutes"></span></p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="standardTime"></p>
+                </div>
+            </div>
+
+            <!-- Interview Report List -->
+            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900" data-i18n="interviewReportList"></h2>
+                    <p class="text-sm text-gray-500 mt-1" data-i18n="interviewReportListDesc"></p>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+                    <div class="flex items-center gap-4">
+                        <div class="flex-1 relative">
+                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                            <input type="text" id="searchInput" data-i18n-placeholder="searchByNameOrPosition" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                        </div>
+                        <select id="ratingFilter" class="px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                            <option value="" data-i18n="all"></option>
+                            <option value="優秀" data-i18n="excellent"></option>
+                            <option value="良好" data-i18n="good"></option>
+                            <option value="平均" data-i18n="average"></option>
+                            <option value="要改善" data-i18n="needsImprovement"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="applicantName"></th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="position"></th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="interviewDate"></th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="time"></th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="overallScore"></th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="rating"></th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="action"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <!-- Row 1 -->
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-medium text-gray-900">岡本拓也</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">新宿店 販売スタッフ（アルバイト）</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">2024-01-15</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">25分</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-semibold text-green-600">88点</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">優秀</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <button class="text-sm text-primary-600 hover:text-primary-700" data-i18n="viewDetails"></button>
+                                </td>
+                            </tr>
+
+                            <!-- Row 2 -->
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-medium text-gray-900">田中美奈子</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">渋谷店 レジスタッフ（アルバイト）</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">2024-01-14</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">20分</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-semibold text-blue-600">82点</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">良好</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <button class="text-sm text-primary-600 hover:text-primary-700" data-i18n="viewDetails"></button>
+                                </td>
+                            </tr>
+
+                            <!-- Row 3 -->
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-medium text-gray-900">山田太郎</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">新宿店 店長候補（正社員）</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">2024-01-13</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm text-gray-700">35分</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-semibold text-green-600">91点</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">優秀</span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <button class="text-sm text-primary-600 hover:text-primary-700" data-i18n="viewDetails"></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -345,12 +460,156 @@
         // Initialize i18n on page load
         window.addEventListener('DOMContentLoaded', function() {
             i18n.updatePage();
+            initializeFilters();
+            initializeModal();
         });
 
         // Update translations when language changes
         window.addEventListener('languageChanged', function() {
             i18n.updatePage();
         });
+
+        // Search and filter functionality
+        function initializeFilters() {
+            const searchInput = document.getElementById('searchInput');
+            const ratingFilter = document.getElementById('ratingFilter');
+            const tableRows = document.querySelectorAll('tbody tr');
+
+            // Function to filter table
+            function filterTable() {
+                const searchValue = searchInput.value.toLowerCase();
+                const ratingValue = ratingFilter.value;
+
+                tableRows.forEach(row => {
+                    const applicantName = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                    const position = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                    const rating = row.querySelector('td:nth-child(6) span').textContent;
+
+                    // Check search match
+                    const searchMatch = applicantName.includes(searchValue) || position.includes(searchValue);
+
+                    // Check rating match
+                    const ratingMatch = !ratingValue || rating === ratingValue;
+
+                    // Show/hide row based on both filters
+                    if (searchMatch && ratingMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            // Add event listeners
+            searchInput.addEventListener('input', filterTable);
+            ratingFilter.addEventListener('change', filterTable);
+        }
+
+        // Modal functionality
+        function initializeModal() {
+            const modal = document.getElementById('interviewModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const viewDetailsButtons = document.querySelectorAll('[data-i18n="viewDetails"]');
+
+            // Sample data for each applicant
+            const applicantsData = {
+                '岡本拓也': {
+                    position: '新宿店 販売スタッフ（アルバイト）',
+                    date: '2024-01-15',
+                    time: '25分',
+                    score: '88点',
+                    rating: '優秀'
+                },
+                '田中美奈子': {
+                    position: '渋谷店 レジスタッフ（アルバイト）',
+                    date: '2024-01-14',
+                    time: '20分',
+                    score: '82点',
+                    rating: '良好'
+                },
+                '山田太郎': {
+                    position: '新宿店 店長候補（正社員）',
+                    date: '2024-01-13',
+                    time: '35分',
+                    score: '91点',
+                    rating: '優秀'
+                }
+            };
+
+            // Open modal
+            viewDetailsButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const row = this.closest('tr');
+                    const applicantName = row.querySelector('td:nth-child(1)').textContent.trim();
+                    const applicantData = applicantsData[applicantName];
+
+                    if (applicantData) {
+                        // Populate modal data
+                        document.getElementById('modalApplicantName').textContent = `${applicantName} - ${applicantData.position}`;
+                        document.getElementById('modalInterviewDate').textContent = applicantData.date;
+                        document.getElementById('modalInterviewTime').textContent = applicantData.time;
+                        document.getElementById('modalOverallScore').textContent = applicantData.score;
+
+                        const ratingBadge = document.getElementById('modalRating');
+                        ratingBadge.textContent = applicantData.rating;
+
+                        // Set rating badge color
+                        if (applicantData.rating === '優秀') {
+                            ratingBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800';
+                        } else if (applicantData.rating === '良好') {
+                            ratingBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800';
+                        }
+
+                        // Show modal
+                        modal.classList.remove('hidden');
+                        modal.classList.add('flex');
+                    }
+                });
+            });
+
+            // Close modal
+            closeModalBtn.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
+
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+
+                    // Remove active state from all tabs
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-white', 'border-t', 'border-l', 'border-r', 'rounded-t-lg', 'text-gray-900', '-mb-px');
+                        btn.classList.add('bg-gray-50', 'text-gray-600', 'border-b');
+                    });
+
+                    // Add active state to clicked tab
+                    this.classList.add('active', 'bg-white', 'border-t', 'border-l', 'border-r', 'rounded-t-lg', 'text-gray-900', '-mb-px');
+                    this.classList.remove('bg-gray-50', 'border-b');
+
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+
+                    // Show selected tab content
+                    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+                });
+            });
+        }
     </script>
 </body>
 </html>

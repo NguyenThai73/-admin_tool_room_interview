@@ -48,15 +48,35 @@ function getSidebarHTML() {
             </svg>
             <span data-i18n="reports">${i18n.t('reports')}</span>
         </a>
-        <a href="settings.html" class="nav-link flex items-center gap-3 px-4 py-2.5" data-page="settings">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            <span data-i18n="settings">${i18n.t('settings')}</span>
-        </a>
+        <div>
+            <button id="settingsToggle" class="nav-link flex items-center justify-between w-full px-4 py-2.5" data-page="settings">
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    <span data-i18n="settings">${i18n.t('settings')}</span>
+                </div>
+                <svg id="settingsChevron" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+            <!-- Settings Submenu -->
+            <div id="settingsSubmenu" class="hidden bg-white/5 ml-5 mt-0 space-y-1">
+                <a href="members.html" class="submenu-link block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded transition" data-page="members">
+                    <span data-i18n="members">${i18n.t('members')}</span>
+                </a>
+                <a href="groups.html" class="submenu-link block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded transition" data-page="groups">
+                    <span data-i18n="groups">${i18n.t('groups')}</span>
+                </a>
+                <a href="settings.html" class="submenu-link block px-4 py-2 text-sm text-white/70 hover:text-white hover:bg-white/5 rounded transition" data-page="settings">
+                    <span data-i18n="companySettings">${i18n.t('companySettings')}</span>
+                </a>
+            </div>
+        </div>
     </nav>
 
     <!-- Language Switcher -->
@@ -91,6 +111,7 @@ function loadSidebar() {
         container.innerHTML = getSidebarHTML();
         setActivePage();
         setupLanguageSwitcher();
+        setupSettingsToggle();
     }
 }
 
@@ -107,6 +128,33 @@ function setupLanguageSwitcher() {
     }
 }
 
+// Setup settings submenu toggle
+function setupSettingsToggle() {
+    const settingsToggle = document.getElementById('settingsToggle');
+    const settingsSubmenu = document.getElementById('settingsSubmenu');
+    const settingsChevron = document.getElementById('settingsChevron');
+
+    if (settingsToggle && settingsSubmenu && settingsChevron) {
+        settingsToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            settingsSubmenu.classList.toggle('hidden');
+            settingsChevron.classList.toggle('rotate-180');
+        });
+    }
+
+    // Auto-expand settings submenu if on a settings-related page
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const pageName = currentPage.replace('.html', '');
+    if (pageName === 'settings' || pageName === 'members' || pageName === 'groups') {
+        if (settingsSubmenu) {
+            settingsSubmenu.classList.remove('hidden');
+            if (settingsChevron) {
+                settingsChevron.classList.add('rotate-180');
+            }
+        }
+    }
+}
+
 // Set active sidebar link based on current page
 function setActivePage() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -120,11 +168,26 @@ function setActivePage() {
         link.classList.add('text-white/80', 'hover:bg-white/5', 'hover:text-white');
     });
 
-    // Add active class to current page link
+    // Add active class to current page link (main nav)
 	const activeLink = document.querySelector(`.nav-link[data-page="${normalizedPage}"]`);
     if (activeLink) {
         activeLink.classList.remove('text-white/80', 'hover:bg-white/5', 'hover:text-white');
         activeLink.classList.add('bg-sidebar-active', 'text-white', 'border-l-4', 'border-white');
+    }
+
+    // Also check submenu items
+    document.querySelectorAll('.submenu-link').forEach(link => {
+        link.classList.remove('text-white', 'bg-white/10');
+        link.classList.add('text-white/70');
+    });
+
+    // Add active class to submenu item if current page is members or groups
+    if (pageName === 'members' || pageName === 'groups' || pageName === 'settings') {
+        const activeSubmenuLink = document.querySelector(`.submenu-link[data-page="${pageName}"]`);
+        if (activeSubmenuLink) {
+            activeSubmenuLink.classList.remove('text-white/70');
+            activeSubmenuLink.classList.add('text-white', 'bg-white/10');
+        }
     }
 }
 

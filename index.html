@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>応募者 - People X</title>
+    <title>応募者</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
     <script>
@@ -36,6 +36,246 @@
     <div id="sidebar-container"></div>
     <script src="i18n.js"></script>
     <script src="sidebar.js"></script>
+
+    <!-- Interview Detail Modal -->
+    <div id="interviewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4">
+            <!-- Modal Header -->
+            <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-xl">
+                <h2 class="text-xl font-semibold text-gray-900" data-i18n="interviewReportDetail"></h2>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-6">
+                <!-- Applicant Info -->
+                <div class="mb-6">
+                    <h3 id="modalApplicantName" class="text-lg font-medium text-gray-900 mb-4"></h3>
+
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1" data-i18n="interviewDate"></p>
+                            <p id="modalInterviewDate" class="text-base font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1" data-i18n="time"></p>
+                            <p id="modalInterviewTime" class="text-base font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1" data-i18n="overallScore"></p>
+                            <p id="modalOverallScore" class="text-2xl font-bold text-green-600"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600 mb-1" data-i18n="rating"></p>
+                            <span id="modalRating" class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Navigation -->
+                <div class="flex gap-0 border-b border-gray-200 mb-6">
+                    <button class="tab-btn active flex-1 px-6 py-3 text-sm font-medium bg-white border-t border-l border-r border-gray-200 rounded-t-lg text-gray-900 -mb-px" data-tab="analysis" data-i18n="aiAnalysis"></button>
+                    <button class="tab-btn flex-1 px-6 py-3 text-sm font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 border-b border-gray-200" data-tab="evaluation" data-i18n="overallEvaluation"></button>
+                    <button class="tab-btn flex-1 px-6 py-3 text-sm font-medium bg-gray-50 text-gray-600 hover:bg-gray-100 border-b border-gray-200" data-tab="content" data-i18n="interviewContent"></button>
+                </div>
+
+                <!-- Tab Content: AI Analysis -->
+                <div id="tab-analysis" class="tab-content">
+                    <h4 class="text-base font-semibold text-gray-900 mb-6" data-i18n="abilityEvaluation"></h4>
+
+                    <!-- Ability Bars -->
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-normal text-gray-900" data-i18n="communicationSkills"></span>
+                                <span class="text-sm font-bold text-gray-900">92点</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#312e81] h-2.5 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-normal text-gray-900" data-i18n="technicalSkills"></span>
+                                <span class="text-sm font-bold text-gray-900">85点</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#312e81] h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-normal text-gray-900" data-i18n="problemSolving"></span>
+                                <span class="text-sm font-bold text-gray-900">85点</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#312e81] h-2.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-normal text-gray-900" data-i18n="cultureFit"></span>
+                                <span class="text-sm font-bold text-gray-900">90点</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2.5">
+                                <div class="bg-[#312e81] h-2.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Overall Evaluation -->
+                <div id="tab-evaluation" class="tab-content hidden">
+                    <!-- Overall Text -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="overallEvaluationText"></h4>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            非常に優秀な候補者です。明るく元気な接客態度で、お客様とのコミュニケーション能力が高いです。小売業での経験も豊富で、即戦力として活躍できる人材です。
+                        </p>
+                    </div>
+
+                    <!-- Strengths -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="strengths"></h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>明るく元気な接客態度</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>小売店での2年間の実務経験</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>高いコミュニケーション能力</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>シフトの柔軟な対応が可能</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>チームワークを大切にする姿勢</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Concerns -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="concerns"></h4>
+                        <ul class="space-y-2">
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>ドラッグストアでの経験がない</span>
+                            </li>
+                            <li class="flex items-start gap-2 text-sm text-gray-700">
+                                <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                                </svg>
+                                <span>医薬品知識が限定的</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Recommendation -->
+                    <div class="bg-primary-50 rounded-lg p-4">
+                        <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="recommendation"></h4>
+                        <p class="text-sm text-gray-700 leading-relaxed">
+                            強く推薦します。接客スキルが高く、チームに良い影響を与えられる人材です。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Interview Content -->
+                <div id="tab-content" class="tab-content hidden">
+                    <h4 class="text-sm text-gray-600 mb-4" data-i18n="questionAndAnswer"></h4>
+
+                    <!-- Questions Container with max height and scroll -->
+                    <div class="space-y-6 max-h-[400px] overflow-y-auto pr-2">
+                        <!-- Question 1 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 1</h5>
+                                <span class="text-sm text-gray-500">90点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">自己紹介をお願いします</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                はい、岡本拓也と申します。現在大学3年生で、小売店でアルバイトを2年間続けています。お客様と接することが好きで、笑顔で元気な接客を心がけています。
+                            </p>
+                        </div>
+
+                        <!-- Question 2 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 2</h5>
+                                <span class="text-sm text-gray-500">88点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">小売業での経験について教えてください</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                小売店で2年間販売スタッフとして働いています。接客、商品陳列、在庫管理など一通りの業務を経験しました。特に忙しい時間帯は、効率的な動きとチームワークが重要だと学びました。
+                            </p>
+                        </div>
+
+                        <!-- Question 3 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 3</h5>
+                                <span class="text-sm text-gray-500">92点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">お客様対応で大切にしていることは何ですか？</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                笑顔と元気な挨拶を心がけています。お客様の表情や様子を見て、必要なタイミングでお声がけすることも大切だと思います。また、お客様の要望には迅速に対応するように心がけています。
+                            </p>
+                        </div>
+
+                        <!-- Question 4 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 4</h5>
+                                <span class="text-sm text-gray-500">80点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">医薬品の知識はありますか？</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                専門的な知識はまだありませんが、入社後にしっかり学んで、お客様に適切なアドバイスができるようになりたいです。
+                            </p>
+                        </div>
+
+                        <!-- Question 5 -->
+                        <div class="border-l-4 border-[#312e81] pl-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h5 class="text-base font-semibold text-gray-900"><span data-i18n="question"></span> 5</h5>
+                                <span class="text-sm text-gray-500">95点</span>
+                            </div>
+                            <p class="text-sm text-gray-900 mb-2">シフトの希望はありますか？</p>
+                            <p class="text-sm text-gray-700 leading-relaxed">
+                                平日の夕方以降と週末は入れます。学業との両立を考えていますが、繁忙期などは柔軟に対応できます。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="ml-60 h-screen flex flex-col">
@@ -743,9 +983,110 @@
             renderPagination(paginationInfo);
         }
 
-        // View result
+        // View result - Open modal
         function viewResult(name) {
-            window.location.href = 'applicant-detail.html';
+            const modal = document.getElementById('interviewModal');
+
+            // Sample data for applicants
+            const applicantData = {
+                '岡本拓也': {
+                    position: '新宿店 販売スタッフ（アルバイト）',
+                    date: '2024-01-15',
+                    time: '25分',
+                    score: '88点',
+                    rating: '優秀'
+                },
+                '田中美奈子': {
+                    position: '渋谷店 レジスタッフ（アルバイト）',
+                    date: '2024-01-14',
+                    time: '20分',
+                    score: '82点',
+                    rating: '良好'
+                },
+                '山田太郎': {
+                    position: '新宿店 店長候補（正社員）',
+                    date: '2024-01-13',
+                    time: '35分',
+                    score: '91点',
+                    rating: '優秀'
+                }
+            };
+
+            const data = applicantData[name] || {
+                position: 'フロントエンドエンジニア',
+                date: '2024-10-12',
+                time: '30分',
+                score: '80点',
+                rating: '良好'
+            };
+
+            // Populate modal with data
+            document.getElementById('modalApplicantName').textContent = `${name} - ${data.position}`;
+            document.getElementById('modalInterviewDate').textContent = data.date;
+            document.getElementById('modalInterviewTime').textContent = data.time;
+            document.getElementById('modalOverallScore').textContent = data.score;
+
+            const ratingBadge = document.getElementById('modalRating');
+            ratingBadge.textContent = data.rating;
+
+            // Set rating badge color
+            if (data.rating === '優秀') {
+                ratingBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800';
+            } else if (data.rating === '良好') {
+                ratingBadge.className = 'inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800';
+            }
+
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // Initialize modal functionality
+        function initializeModal() {
+            const modal = document.getElementById('interviewModal');
+            const closeModalBtn = document.getElementById('closeModal');
+
+            // Close modal
+            closeModalBtn.addEventListener('click', function() {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            });
+
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }
+            });
+
+            // Tab switching
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+
+                    // Remove active state from all tabs
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-white', 'border-t', 'border-l', 'border-r', 'rounded-t-lg', 'text-gray-900', '-mb-px');
+                        btn.classList.add('bg-gray-50', 'text-gray-600', 'border-b');
+                    });
+
+                    // Add active state to clicked tab
+                    this.classList.add('active', 'bg-white', 'border-t', 'border-l', 'border-r', 'rounded-t-lg', 'text-gray-900', '-mb-px');
+                    this.classList.remove('bg-gray-50', 'border-b');
+
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+
+                    // Show selected tab content
+                    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+                });
+            });
         }
 
         // Toggle filter popup
@@ -788,6 +1129,8 @@
 
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function () {
+            i18n.updatePage();
+            initializeModal();
             const tableContainer = document.getElementById('tableContainer');
             const thead = tableContainer.querySelector('thead');
 
