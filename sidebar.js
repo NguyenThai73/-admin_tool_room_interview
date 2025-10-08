@@ -1,5 +1,6 @@
 // Sidebar HTML template
-const sidebarHTML = `
+function getSidebarHTML() {
+    return `
 <!-- Sidebar Component -->
 <aside class="fixed left-0 top-0 h-screen w-60 bg-sidebar-bg text-white flex flex-col">
     <!-- Logo -->
@@ -13,9 +14,9 @@ const sidebarHTML = `
                         clip-rule="evenodd" />
                 </svg>
             </div>
-            <span class="font-semibold text-lg">People X</span>
+            <span class="font-semibold text-lg" data-i18n="appTitle">${i18n.t('appTitle')}</span>
         </div>
-        <div class="text-xs text-white/60 mt-1 ml-10">管理画面</div>
+        <div class="text-xs text-white/60 mt-1 ml-10" data-i18n="appSubtitle">${i18n.t('appSubtitle')}</div>
     </div>
     <!-- Navigation -->
     <nav class="flex-1 py-4">
@@ -24,28 +25,28 @@ const sidebarHTML = `
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            <span>応募者</span>
+            <span data-i18n="applicants">${i18n.t('applicants')}</span>
         </a>
         <a href="jobs.html" class="nav-link flex items-center gap-3 px-4 py-2.5" data-page="jobs">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            <span>求人</span>
+            <span data-i18n="jobs">${i18n.t('jobs')}</span>
         </a>
         <a href="questions.html" class="nav-link flex items-center gap-3 px-4 py-2.5" data-page="questions">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span>質問</span>
+            <span data-i18n="questions">${i18n.t('questions')}</span>
         </a>
         <a href="reports.html" class="nav-link flex items-center gap-3 px-4 py-2.5" data-page="reports">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
-            <span>レポート</span>
+            <span data-i18n="reports">${i18n.t('reports')}</span>
         </a>
         <a href="settings.html" class="nav-link flex items-center gap-3 px-4 py-2.5" data-page="settings">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,9 +55,20 @@ const sidebarHTML = `
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <span>設定</span>
+            <span data-i18n="settings">${i18n.t('settings')}</span>
         </a>
     </nav>
+
+    <!-- Language Switcher -->
+    <div class="px-4 py-2 border-t border-white/10">
+        <button id="language-switcher" class="flex items-center gap-2 text-sm text-white/80 hover:text-white w-full">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+            </svg>
+            <span data-i18n="language">${i18n.t('language')}</span>
+        </button>
+    </div>
 
     <!-- Collapse Button -->
     <div class="p-4 border-t border-white/10">
@@ -65,18 +77,33 @@ const sidebarHTML = `
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
             </svg>
-            <span>折りたたむ</span>
+            <span data-i18n="collapse">${i18n.t('collapse')}</span>
         </button>
     </div>
 </aside>
 `;
+}
 
 // Load sidebar component
 function loadSidebar() {
     const container = document.getElementById('sidebar-container');
     if (container) {
-        container.innerHTML = sidebarHTML;
+        container.innerHTML = getSidebarHTML();
         setActivePage();
+        setupLanguageSwitcher();
+    }
+}
+
+// Setup language switcher
+function setupLanguageSwitcher() {
+    const languageSwitcher = document.getElementById('language-switcher');
+    if (languageSwitcher) {
+        languageSwitcher.addEventListener('click', () => {
+            const currentLang = i18n.getCurrentLanguage();
+            const newLang = currentLang === 'ja' ? 'en' : 'ja';
+            i18n.setLanguage(newLang);
+            loadSidebar(); // Reload sidebar with new language
+        });
     }
 }
 
@@ -108,14 +135,7 @@ if (document.readyState === 'loading') {
     loadSidebar();
 }
 
-
-// <!-- Language Switcher -->
-// <div class="px-4 py-2 border-b border-white/10">
-//     <button class="flex items-center gap-2 text-sm text-white/80 hover:text-white">
-//         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-//                 d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-//         </svg>
-//         EN
-//     </button>
-// </div>
+// Listen for language change events to update sidebar
+window.addEventListener('languageChanged', () => {
+    loadSidebar();
+});

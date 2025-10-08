@@ -32,6 +32,7 @@
 <body class="bg-gray-50">
     <!-- Sidebar Container -->
     <div id="sidebar-container"></div>
+    <script src="i18n.js"></script>
     <script src="sidebar.js"></script>
 
 
@@ -325,5 +326,17 @@
             </div>
         </div>
     </main>
+
+    <script>
+        // Initialize i18n on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            i18n.updatePage();
+        });
+
+        // Update translations when language changes
+        window.addEventListener('languageChanged', function() {
+            i18n.updatePage();
+        });
+    </script>
 </body>
 </html>
