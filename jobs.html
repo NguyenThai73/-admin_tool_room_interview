@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>求人管理 - People X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Fixed data (mock)
+        const FIXED_JOBS = [
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: '中途',
+                title: 'フロントエンドエンジニア',
+                group: 'People Agent'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: '新卒',
+                title: 'フロントエンジニア（新卒・インターン）',
+                group: '全社採用グループ'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: 'アルバイト',
+                title: '広報・PR',
+                group: '全社採用グループ / People Agent'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: '中途',
+                title: 'バックエンドエンジニア',
+                group: '株式会社People&Design'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: '中途',
+                title: '法人営業',
+                group: '全社採用グループ / 株式会社People&Design'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: 'アルバイト',
+                title: 'グラフィックデザイナー',
+                group: 'People Agent / 株式会社People&Design'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: 'アルバイト',
+                title: '事務',
+                group: '全社採用グループ / People Agent / 株式会社People&D...'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: 'アルバイト',
+                title: '経理業務',
+                group: '全社採用グループ / 株式会社People&Design'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: 'アルバイト',
+                title: '事務',
+                group: '全社採用グループ / People Agent / 株式会社People&D...'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: 'アルバイト',
+                title: '経理業務',
+                group: '全社採用グループ / 株式会社People&Design'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: 'アルバイト',
+                title: '事務',
+                group: '全社採用グループ / People Agent / 株式会社People&D...'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: 'アルバイト',
+                title: '経理業務',
+                group: '全社採用グループ / 株式会社People&Design'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: 'アルバイト',
+                title: '事務',
+                group: '全社採用グループ / People Agent / 株式会社People&D...'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: 'アルバイト',
+                title: '経理業務',
+                group: '全社採用グループ / 株式会社People&Design'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: 'アルバイト',
+                title: '事務',
+                group: '全社採用グループ / People Agent / 株式会社People&D...'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: 'アルバイト',
+                title: '経理業務',
+                group: '全社採用グループ / 株式会社People&Design'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: 'アルバイト',
+                title: '事務',
+                group: '全社採用グループ / People Agent / 株式会社People&D...'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: 'アルバイト',
+                title: '経理業務',
+                group: '全社採用グループ / 株式会社People&Design'
+            },
+            {
+                status: { text: '停止中', class: 'bg-gray-100 text-gray-800', dot: 'bg-gray-500' },
+                category: 'アルバイト',
+                title: '事務',
+                group: '全社採用グループ / People Agent / 株式会社People&D...'
+            },
+            {
+                status: { text: '面接受付中', class: 'bg-green-100 text-green-800', dot: 'bg-green-500' },
+                category: 'アルバイト',
+                title: '経理業務',
+                group: '全社採用グループ / 株式会社People&Design'
+            }
+        ];
+
+        function renderJobs(jobs) {
+            const container = document.getElementById('jobsContainer');
+            const loading = document.getElementById('jobsLoading');
+
+            if (loading) loading.remove();
+
+            container.innerHTML = jobs.map(job => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${job.status.class}">
+                            <span class="w-2 h-2 rounded-full ${job.status.dot} mr-1.5"></span>
+                            ${job.status.text}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-700">${job.category}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-900 font-medium">${job.title}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-700">${job.group}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center gap-2">
+                            <button class="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                                </svg>
+                                リンクをコピー
+                            </button>
+                            <button class="text-gray-400 hover:text-gray-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Fixed options data for filters
+        function getFilterOptions() {
+            return {
+                statuses: ['面接受付中', '停止中'],
+                categories: ['新卒', '中途', 'アルバイト'],
+                groups: ['全社採用グループ', 'People Agent', '株式会社People&Design']
+            };
+        }
+
+        function populateFilterSelects() {
+            const { statuses, categories, groups } = getFilterOptions();
+            const statusSelect = document.getElementById('statusSelect');
+            const categorySelect = document.getElementById('categorySelect');
+            const groupSelect = document.getElementById('groupSelect');
+
+            if (statusSelect) {
+                statuses.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v;
+                    opt.textContent = v;
+                    statusSelect.appendChild(opt);
+                });
+            }
+
+            if (categorySelect) {
+                categories.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v;
+                    opt.textContent = v;
+                    categorySelect.appendChild(opt);
+                });
+            }
+
+            if (groupSelect) {
+                groups.forEach(v => {
+                    const opt = document.createElement('option');
+                    opt.value = v;
+                    opt.textContent = v;
+                    groupSelect.appendChild(opt);
+                });
+            }
+        }
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#4338ca',
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            600: '#4338ca',
+                            700: '#3730a3',
+                            800: '#312e81',
+                        },
+                        sidebar: {
+                            bg: '#2d1b69',
+                            active: '#3730a3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+    <script src="sidebar.js"></script>
+
+    <!-- Main Content -->
+    <main class="ml-60 h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-200 px-8 py-6 sticky top-0 z-30">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-semibold text-gray-900">求人管理</h1>
+                <button onclick="createJob()" class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-soft">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    新規作成
+                </button>
+            </div>
+            <p class="text-sm text-gray-500 mt-1">求人情報の管理</p>
+
+            <!-- Search + Filters Container (Combined Collapsible) -->
+            <div class="mt-6 bg-white border border-gray-200 rounded-lg">
+                <button onclick="toggleControls()" class="w-full px-6 py-3 flex items-center justify-between hover:bg-gray-50 transition">
+                    <span class="text-sm font-medium text-gray-700">検索・フィルター</span>
+                    <svg id="controlsToggleIcon" class="w-5 h-5 text-gray-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div id="controlsSection" class="px-6 pb-6">
+                    <!-- Search Bar -->
+                    <div class="pt-4 pb-4">
+                        <div class="flex gap-3">
+                            <div class="relative flex-1">
+                                <input type="text" placeholder="求人名や職種で検索..." class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <button onclick="performSearch()" class="px-6 py-2.5 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0118 0z"/>
+                                </svg>
+                                検索
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filter Options -->
+                    <div class="border-t border-gray-200 pt-4">
+                        <div class="grid grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">1. ステータスを選択</label>
+                                <select id="statusSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                    <option value="">すべてのステータス</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">2. カテゴリーを選択</label>
+                                <select id="categorySelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                    <option value="">すべてのカテゴリー</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">3. フィルターオプション</label>
+                                <div class="relative">
+                                    <button id="groupFilterBtn" onclick="toggleGroupFilterPopup()" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 text-left flex items-center justify-between">
+                                        <span id="groupDisplay">フィルターオプション</span>
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                        </svg>
+                                    </button>
+
+                                    <!-- Group Filter Popup -->
+                                    <div id="groupFilterPopup" class="hidden absolute top-full mt-2 left-0 right-0 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                                        <div class="p-4">
+                                            <h3 class="font-semibold text-gray-900 mb-4">採用グループ</h3>
+                                            <div class="space-y-2 max-h-80 overflow-y-auto">
+                                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                                    <input type="checkbox" value="全社採用グループ" class="group-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                                    <span class="text-sm text-gray-700">全社採用グループ</span>
+                                                </label>
+                                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                                    <input type="checkbox" value="People Agent" class="group-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                                    <span class="text-sm text-gray-700">People Agent</span>
+                                                </label>
+                                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                                    <input type="checkbox" value="株式会社People&Design" class="group-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                                    <span class="text-sm text-gray-700">株式会社People&Design</span>
+                                                </label>
+                                            </div>
+                                            <div class="flex gap-2 mt-4 pt-4 border-t border-gray-200">
+                                                <button onclick="clearGroupFilter()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                                                    クリア
+                                                </button>
+                                                <button onclick="confirmGroupFilter()" class="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700">
+                                                    OK
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Jobs Table -->
+        <div class="flex-1 flex flex-col p-4 overflow-hidden">
+            <div class="bg-white rounded-lg shadow overflow-hidden flex flex-col flex-1">
+                <div class="overflow-y-auto flex-1">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">ステータス</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">カテゴリー</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">募集職種名</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">採用グループ</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50">アクション</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobsContainer" class="bg-white divide-y divide-gray-200">
+                            <!-- Loading spinner -->
+                            <tr id="jobsLoading">
+                                <td colspan="5" class="px-6 py-8 text-center">
+                                    <div class="flex items-center justify-center gap-2 text-gray-500">
+                                        <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <circle cx="12" cy="12" r="10" stroke-width="4" class="opacity-25"></circle>
+                                            <path d="M4 12a8 8 0 018-8" stroke-width="4" class="opacity-75"></path>
+                                        </svg>
+                                        データ取得中...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination - Fixed at bottom -->
+            <div class="fixed bottom-0 left-60 right-0 bg-white border-t border-gray-200 px-8 py-4 z-20">
+                <div class="flex items-center justify-between">
+                    <div class="text-sm text-gray-600">
+                        <span>1-40件表示 / 40件</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">前へ</button>
+                        <button class="px-3 py-2 text-sm bg-primary-600 text-white rounded-lg">1</button>
+                        <button class="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">2</button>
+                        <button class="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">3</button>
+                        <button class="px-3 py-2 text-sm text-gray-500 hover:text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">次へ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // ----- Create Job Modal -----
+        let selectedCreateCategory = '';
+
+        function openCreateJobModal() {
+            // reset state
+            selectedCreateCategory = '';
+            document.querySelectorAll('[data-create-category]')
+                .forEach(btn => btn.classList.remove('ring-2', 'ring-primary-600', 'bg-primary-50'));
+            const modal = document.getElementById('createJobModal');
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeCreateJobModal() {
+            const modal = document.getElementById('createJobModal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function selectCreateCategory(category) {
+            selectedCreateCategory = category;
+            document.querySelectorAll('[data-create-category]')
+                .forEach(btn => {
+                    if (btn.getAttribute('data-create-category') === category) {
+                        btn.classList.add('ring-2', 'ring-primary-600', 'bg-primary-50');
+                    } else {
+                        btn.classList.remove('ring-2', 'ring-primary-600', 'bg-primary-50');
+                    }
+                });
+        }
+
+        function confirmCreateJob() {
+            if (!selectedCreateCategory) return;
+            // chuyển đến trang tạo việc làm, kèm tham số category
+            window.location.href = `job-create.html?category=${encodeURIComponent(selectedCreateCategory)}`;
+        }
+
+        function toggleControls() {
+            const controlsSection = document.getElementById('controlsSection');
+            const icon = document.getElementById('controlsToggleIcon');
+
+            controlsSection.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        function createJob() {
+            openCreateJobModal();
+        }
+
+        function performSearch() {
+            const searchInput = document.querySelector('input[placeholder="求人名や職種で検索..."]');
+            const searchTerm = searchInput.value.trim();
+            
+            if (searchTerm) {
+                console.log('検索中:', searchTerm);
+                alert(`検索: "${searchTerm}"`);
+            } else {
+                alert('検索キーワードを入力してください');
+            }
+        }
+
+        // Group filter state
+        let selectedGroups = [];
+
+        // Toggle group filter popup
+        function toggleGroupFilterPopup() {
+            const popup = document.getElementById('groupFilterPopup');
+            popup.classList.toggle('hidden');
+        }
+
+        // Close popup when clicking outside
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('groupFilterPopup');
+            const btn = document.getElementById('groupFilterBtn');
+            if (popup && btn && !popup.contains(event.target) && !btn.contains(event.target)) {
+                popup.classList.add('hidden');
+            }
+        });
+
+        // Confirm group filter (when clicking OK button)
+        function confirmGroupFilter() {
+            const checkboxes = document.querySelectorAll('.group-checkbox');
+            selectedGroups = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            
+            // Update display text
+            const displayElement = document.getElementById('groupDisplay');
+            if (selectedGroups.length === 0) {
+                displayElement.textContent = 'フィルターオプション';
+            } else if (selectedGroups.length === 1) {
+                displayElement.textContent = selectedGroups[0];
+            } else {
+                displayElement.textContent = `${selectedGroups.length}件選択`;
+            }
+            
+            toggleGroupFilterPopup();
+            console.log('採用グループ filter applied:', selectedGroups);
+        }
+
+        // Clear group filter
+        function clearGroupFilter() {
+            const checkboxes = document.querySelectorAll('.group-checkbox');
+            checkboxes.forEach(cb => cb.checked = false);
+            selectedGroups = [];
+            
+            // Update display text
+            document.getElementById('groupDisplay').textContent = 'フィルターオプション';
+        }
+
+        // Initialize controls and fetch data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate filter options (fixed data)
+            populateFilterSelects();
+            setTimeout(() => {
+                renderJobs(FIXED_JOBS);
+            }, 500);
+        });
+    </script>
+
+    <!-- Create Job Modal -->
+    <div id="createJobModal" class="hidden fixed inset-0 z-50 flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/50" onclick="closeCreateJobModal()"></div>
+        <div class="relative z-10 max-w-xl w-full mx-4 bg-white rounded-2xl shadow-xl border border-gray-200">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-gray-900">求人を新規作成</h3>
+                <button class="text-gray-400 hover:text-gray-600" onclick="closeCreateJobModal()">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="px-6 pt-4 pb-2 text-sm text-gray-600">選択カテゴリーを選択してください</div>
+            <div class="px-6 pb-2 grid grid-cols-3 gap-4">
+                <button data-create-category="新卒" onclick="selectCreateCategory('新卒')" class="w-full px-6 py-6 border border-gray-300 rounded-xl hover:bg-gray-50 text-gray-900 text-base font-medium transition">
+                    新卒
+                </button>
+                <button data-create-category="中途" onclick="selectCreateCategory('中途')" class="w-full px-6 py-6 border border-gray-300 rounded-xl hover:bg-gray-50 text-gray-900 text-base font-medium transition">
+                    中途
+                </button>
+                <button data-create-category="アルバイト" onclick="selectCreateCategory('アルバイト')" class="w-full px-6 py-6 border border-gray-300 rounded-xl hover:bg-gray-50 text-gray-900 text-base font-medium transition">
+                    アルバイト
+                </button>
+            </div>
+            <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-end gap-3">
+                <button class="px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50" onclick="closeCreateJobModal()">キャンセル</button>
+                <button class="px-4 py-2 rounded-lg text-sm text-white bg-primary-600 hover:bg-primary-700 disabled:opacity-50"
+                        onclick="confirmCreateJob()" id="createConfirmBtn">決定</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

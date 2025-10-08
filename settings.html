@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>設定 - People X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#4338ca',
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            600: '#4338ca',
+                            700: '#3730a3',
+                            800: '#312e81',
+                        },
+                        sidebar: {
+                            bg: '#2d1b69',
+                            active: '#3730a3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+    <script src="sidebar.js"></script>
+
+
+    <!-- Main Content -->
+    <main class="ml-60 min-h-screen">
+        <header class="bg-white border-b border-gray-200 px-8 py-6">
+            <h1 class="text-2xl font-semibold text-gray-900">設定</h1>
+        </header>
+
+        <div class="p-8">
+            <div class="max-w-5xl">
+                <!-- Tabs -->
+                <div class="border-b border-gray-200 mb-8">
+                    <nav class="flex gap-8">
+                        <button class="pb-4 px-1 border-b-2 border-primary-600 text-primary-600 font-medium text-sm">
+                            会社情報
+                        </button>
+                        <button class="pb-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">
+                            アカウント設定
+                        </button>
+                        <button class="pb-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">
+                            <a href="members.html">メンバー</a>
+                        </button>
+                        <button class="pb-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">
+                            <a href="groups.html">グループ</a>
+                        </button>
+                        <button class="pb-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">
+                            会社設定
+                        </button>
+                        <button class="pb-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">
+                            通知設定
+                        </button>
+                        <button class="pb-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 font-medium text-sm">
+                            ブランディング
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Company Info Form -->
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-6">会社情報</h2>
+
+                    <div class="space-y-6">
+                        <!-- Company Name -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                会社名 <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" value="株式会社People X" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                        </div>
+
+                        <!-- Company Name (Kana) -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                会社名（カナ）
+                            </label>
+                            <input type="text" value="カブシキガイシャピープルエックス" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                        </div>
+
+                        <!-- Representative -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                代表者名
+                            </label>
+                            <input type="text" value="山田太郎" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                        </div>
+
+                        <!-- Postal Code -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    郵便番号
+                                </label>
+                                <input type="text" value="100-0001" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    電話番号
+                                </label>
+                                <input type="text" value="03-1234-5678" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                住所
+                            </label>
+                            <input type="text" value="東京都千代田区千代田1-1-1" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                        </div>
+
+                        <!-- Website -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                ウェブサイト
+                            </label>
+                            <input type="url" value="https://peoplex.example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                        </div>
+
+                        <!-- Industry -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                業種
+                            </label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                <option>IT・Web</option>
+                                <option>製造業</option>
+                                <option>サービス業</option>
+                                <option>金融</option>
+                                <option>医療・福祉</option>
+                                <option>その他</option>
+                            </select>
+                        </div>
+
+                        <!-- Number of Employees -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                従業員数
+                            </label>
+                            <select class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                <option>1-10人</option>
+                                <option>11-50人</option>
+                                <option selected>51-100人</option>
+                                <option>101-500人</option>
+                                <option>501-1000人</option>
+                                <option>1000人以上</option>
+                            </select>
+                        </div>
+
+                        <!-- Company Description -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                会社概要
+                            </label>
+                            <textarea rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">AI面接システムを提供する革新的なHRテクノロジー企業です。最新のAI技術を活用し、企業の採用活動を効率化し、より良い人材マッチングを実現します。</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Branding Section -->
+                    <div class="mt-8 pt-6 border-t border-gray-200">
+                        <h3 class="text-md font-semibold text-gray-900 mb-4">ブランディング設定</h3>
+
+                        <div class="space-y-6">
+                            <!-- Logo Upload -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    会社ロゴ
+                                </label>
+                                <div class="flex items-center gap-4">
+                                    <div class="w-24 h-24 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center bg-gray-50">
+                                        <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium text-gray-700">
+                                            ファイルを選択
+                                        </button>
+                                        <p class="text-xs text-gray-500 mt-2">PNG, JPG, GIF (最大2MB)</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Theme Color -->
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    テーマカラー
+                                </label>
+                                <div class="flex items-center gap-4">
+                                    <input type="color" value="#4338ca" class="w-16 h-10 border border-gray-300 rounded cursor-pointer">
+                                    <input type="text" value="#4338ca" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                                </div>
+                                <p class="text-xs text-gray-500 mt-2">面接画面やメールで使用されるブランドカラーを設定できます</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="mt-8 flex justify-end gap-3">
+                        <button class="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
+                            キャンセル
+                        </button>
+                        <button class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium">
+                            保存する
+                        </button>
+                    </div>
+                </div>
+
+                <!-- API Settings -->
+                <div class="bg-white rounded-lg border border-gray-200 p-6 mt-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">API設定</h2>
+
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-start gap-2">
+                            <svg class="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                            </svg>
+                            <div>
+                                <p class="text-sm font-medium text-yellow-900">APIキーは安全に保管してください</p>
+                                <p class="text-sm text-yellow-800 mt-1">APIキーが漏洩すると、不正アクセスの原因となる可能性があります。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                APIキー
+                            </label>
+                            <div class="flex gap-2">
+                                <input type="password" value="px_live_1234567890abcdefghijklmnopqrstuvwxyz" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 font-mono text-sm" readonly>
+                                <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 text-sm font-medium">
+                                    コピー
+                                </button>
+                                <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium">
+                                    再生成
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Webhook URL
+                            </label>
+                            <input type="url" placeholder="https://your-domain.com/webhook" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-1">面接完了時に通知を受け取るURLを設定できます</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-end">
+                        <button class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium">
+                            保存する
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Billing -->
+                <div class="bg-white rounded-lg border border-gray-200 p-6 mt-6">
+                    <h2 class="text-lg font-semibold text-gray-900 mb-4">請求・プラン</h2>
+
+                    <div class="flex items-center justify-between p-4 bg-primary-50 border border-primary-200 rounded-lg mb-6">
+                        <div>
+                            <p class="text-sm font-medium text-primary-900">現在のプラン</p>
+                            <p class="text-2xl font-bold text-primary-600 mt-1">プロフェッショナル</p>
+                            <p class="text-sm text-primary-800 mt-1">¥98,000/月 • 次回更新: 2024/11/12</p>
+                        </div>
+                        <button class="px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium">
+                            プラン変更
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <p class="text-sm text-gray-500">月間面接数</p>
+                            <p class="text-2xl font-bold text-gray-900 mt-2">247 / 500</p>
+                            <div class="w-full h-2 bg-gray-200 rounded-full mt-3 overflow-hidden">
+                                <div class="h-full bg-primary-600" style="width: 49.4%"></div>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <p class="text-sm text-gray-500">ストレージ</p>
+                            <p class="text-2xl font-bold text-gray-900 mt-2">12.5 / 50 GB</p>
+                            <div class="w-full h-2 bg-gray-200 rounded-full mt-3 overflow-hidden">
+                                <div class="h-full bg-green-600" style="width: 25%"></div>
+                            </div>
+                        </div>
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <p class="text-sm text-gray-500">メンバー数</p>
+                            <p class="text-2xl font-bold text-gray-900 mt-2">8 / 20</p>
+                            <div class="w-full h-2 bg-gray-200 rounded-full mt-3 overflow-hidden">
+                                <div class="h-full bg-blue-600" style="width: 40%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4">
+                        <h3 class="text-sm font-medium text-gray-900 mb-3">請求履歴</h3>
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between py-2">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">2024年10月</p>
+                                    <p class="text-xs text-gray-500">プロフェッショナルプラン</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-sm font-semibold text-gray-900">¥98,000</span>
+                                    <button class="text-sm text-primary-600 hover:text-primary-700">
+                                        領収書
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="flex items-center justify-between py-2">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">2024年9月</p>
+                                    <p class="text-xs text-gray-500">プロフェッショナルプラン</p>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-sm font-semibold text-gray-900">¥98,000</span>
+                                    <button class="text-sm text-primary-600 hover:text-primary-700">
+                                        領収書
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

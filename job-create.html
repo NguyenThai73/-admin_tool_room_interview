@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>求人作成 - People X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#4338ca',
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            600: '#4338ca',
+                            700: '#3730a3',
+                            800: '#312e81',
+                        },
+                        sidebar: {
+                            bg: '#2d1b69',
+                            active: '#3730a3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+    <script src="sidebar.js"></script>
+
+
+    <!-- Main Content -->
+    <main class="ml-60 min-h-screen pb-20">
+        <header class="bg-white border-b border-gray-200 px-8 py-6">
+            <div class="flex items-center gap-4 mb-2">
+                <a href="jobs.html" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </a>
+                <h1 class="text-2xl font-semibold text-gray-900">新規求人作成</h1>
+            </div>
+            <p class="text-sm text-gray-500 ml-10">求人情報を入力して、面接を開始しましょう</p>
+        </header>
+
+        <div class="p-8">
+            <div class="max-w-4xl mx-auto">
+                <!-- Progress Steps -->
+                <div class="mb-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-primary-600 text-white rounded-full flex items-center justify-center text-sm font-semibold">1</div>
+                            <span class="text-sm font-medium text-primary-600">基本情報</span>
+                        </div>
+                        <div class="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center text-sm font-semibold">2</div>
+                            <span class="text-sm font-medium text-gray-500">面接設定</span>
+                        </div>
+                        <div class="flex-1 h-0.5 bg-gray-200 mx-4"></div>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center text-sm font-semibold">3</div>
+                            <span class="text-sm font-medium text-gray-500">確認</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="bg-white rounded-lg border border-gray-200 p-8">
+                    <div class="space-y-8">
+                        <!-- Category Selection -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-900 mb-4">
+                                カテゴリー <span class="text-red-500">*</span>
+                            </label>
+                            <div class="grid grid-cols-3 gap-4">
+                                <button class="p-6 border-2 border-primary-600 bg-primary-50 rounded-lg hover:bg-primary-100 transition">
+                                    <div class="w-12 h-12 bg-primary-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-semibold text-primary-900">新卒</p>
+                                    <p class="text-xs text-primary-700 mt-1">新規学卒者向け</p>
+                                </button>
+
+                                <button class="p-6 border-2 border-gray-200 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition">
+                                    <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-900">中途</p>
+                                    <p class="text-xs text-gray-600 mt-1">経験者採用</p>
+                                </button>
+
+                                <button class="p-6 border-2 border-gray-200 rounded-lg hover:border-primary-600 hover:bg-primary-50 transition">
+                                    <div class="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm font-semibold text-gray-900">アルバイト</p>
+                                    <p class="text-xs text-gray-600 mt-1">パート・アルバイト</p>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Job Title -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">
+                                募集職種名 <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text" placeholder="例: フロントエンドエンジニア" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                            <p class="text-xs text-gray-500 mt-2">応募者に表示される職種名を入力してください</p>
+                        </div>
+
+                        <!-- Recruitment Group -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">
+                                採用グループ <span class="text-red-500">*</span>
+                            </label>
+                            <select class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                <option>グループを選択してください</option>
+                                <option>全社採用グループ</option>
+                                <option>People Agent</option>
+                                <option>株式会社People&Design</option>
+                            </select>
+                            <p class="text-xs text-gray-500 mt-2">この求人を管理するグループを選択してください</p>
+                        </div>
+
+                        <!-- Job Description -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-900 mb-2">
+                                募集内容
+                            </label>
+                            <textarea rows="6" placeholder="職務内容、求めるスキル、勤務条件などを記載してください" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent"></textarea>
+                        </div>
+
+                        <!-- Interview Settings -->
+                        <div class="pt-6 border-t border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-6">面接設定</h3>
+
+                            <!-- Accept Interviews Toggle -->
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg mb-6">
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">面接を受け付ける</p>
+                                    <p class="text-xs text-gray-600 mt-1">オンにすると、応募者が面接を実施できるようになります</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" checked class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- Interview Template -->
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-900 mb-2">
+                                    面接テンプレート
+                                </label>
+                                <select class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                    <option>テンプレートを選択（任意）</option>
+                                    <option>新卒フロントエンドエンジニア面接テンプレート</option>
+                                    <option>新卒バックエンドエンジニア面接テンプレート</option>
+                                    <option>中途UI/UXデザイナー面接テンプレート</option>
+                                    <option>中途法人営業面接テンプレート</option>
+                                </select>
+                                <p class="text-xs text-gray-500 mt-2">既存のテンプレートから質問を選択、または次のステップでカスタム質問を追加できます</p>
+                            </div>
+
+                            <!-- Custom Questions -->
+                            <div class="mt-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <label class="text-sm font-semibold text-gray-900">
+                                        面接質問
+                                    </label>
+                                    <button class="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                        </svg>
+                                        質問を追加
+                                    </button>
+                                </div>
+
+                                <div class="space-y-3">
+                                    <div class="flex items-start gap-3 p-4 border border-gray-200 rounded-lg">
+                                        <div class="flex-shrink-0 w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-sm font-semibold text-primary-600">
+                                            1
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" value="自己紹介とこれまでの経験について教えてください" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                        </div>
+                                        <button class="flex-shrink-0 p-2 text-gray-400 hover:text-red-600">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div class="flex items-start gap-3 p-4 border border-gray-200 rounded-lg">
+                                        <div class="flex-shrink-0 w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-sm font-semibold text-primary-600">
+                                            2
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" value="志望動機を教えてください" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                        </div>
+                                        <button class="flex-shrink-0 p-2 text-gray-400 hover:text-red-600">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <div class="flex items-start gap-3 p-4 border border-gray-200 rounded-lg">
+                                        <div class="flex-shrink-0 w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center text-sm font-semibold text-primary-600">
+                                            3
+                                        </div>
+                                        <div class="flex-1">
+                                            <input type="text" value="あなたの強みと弱みを教えてください" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                        </div>
+                                        <button class="flex-shrink-0 p-2 text-gray-400 hover:text-red-600">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interview Time Estimate -->
+                            <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                <div class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-blue-900">予想面接時間: 約15分</p>
+                                        <p class="text-xs text-blue-800 mt-1">質問数: 3問</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Application Settings -->
+                        <div class="pt-6 border-t border-gray-200">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-6">応募設定</h3>
+
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-900 mb-2">
+                                        応募期限
+                                    </label>
+                                    <input type="date" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-900 mb-2">
+                                        募集人数
+                                    </label>
+                                    <input type="number" placeholder="例: 5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
+                        <button class="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 font-medium">
+                            キャンセル
+                        </button>
+                        <div class="flex gap-3">
+                            <button class="px-6 py-3 border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 font-medium">
+                                下書き保存
+                            </button>
+                            <button class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 font-medium flex items-center gap-2">
+                                次へ進む
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

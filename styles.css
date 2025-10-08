@@ -1,0 +1,149 @@
+/* Custom styles for People X Admin Interface */
+/* Tailwind CSS v3 is loaded via CDN in HTML files */
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Smooth transitions */
+* {
+    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+/* Focus ring customization */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+/* Custom badge styles */
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Table hover effects */
+tbody tr:hover {
+    background-color: rgba(249, 250, 251, 0.8);
+}
+
+tbody tr.bg-green-50:hover {
+    background-color: rgba(236, 253, 245, 1);
+}
+
+tbody tr.bg-yellow-50:hover {
+    background-color: rgba(254, 252, 232, 1);
+}
+
+/* Button hover effects */
+button:active {
+    transform: scale(0.98);
+}
+
+/* Sidebar animations */
+.sidebar-link {
+    position: relative;
+}
+
+.sidebar-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.sidebar-link.active::before {
+    background-color: white;
+}
+
+/* Custom shadow utilities */
+.shadow-soft {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Loading animation */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Custom color variables matching the design */
+:root {
+    --color-primary: #4338ca;
+    --color-primary-dark: #3730a3;
+    --color-sidebar-bg: #2d1b69;
+    --color-sidebar-active: #3730a3;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+    aside {
+        transform: translateX(-100%);
+    }
+
+    main {
+        margin-left: 0;
+    }
+}
+
+/* Print styles */
+@media print {
+    aside {
+        display: none;
+    }
+
+    main {
+        margin-left: 0;
+    }
+}

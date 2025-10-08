@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>応募者詳細 - People X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#4338ca',
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            600: '#4338ca',
+                            700: '#3730a3',
+                            800: '#312e81',
+                        },
+                        sidebar: {
+                            bg: '#2d1b69',
+                            active: '#3730a3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+    <script src="sidebar.js"></script>
+
+
+    <!-- Main Content -->
+    <main class="ml-60 min-h-screen pb-20">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-200 px-8 py-6">
+            <div class="flex items-center gap-4 mb-4">
+                <a href="index.html" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </a>
+                <h1 class="text-2xl font-semibold text-gray-900">応募者詳細</h1>
+            </div>
+
+            <!-- Applicant Info -->
+            <div class="flex items-start justify-between">
+                <div class="flex items-start gap-6">
+                    <div class="w-20 h-20 bg-primary-100 rounded-full flex items-center justify-center">
+                        <span class="text-3xl font-bold text-primary-600">岡本</span>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h2 class="text-2xl font-bold text-gray-900">岡本拓也</h2>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                採用推奨
+                            </span>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-sm text-gray-600">
+                                <span class="font-medium">応募職種:</span> フロントエンドエンジニア（新卒）
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <span class="font-medium">メール:</span> okamoto.takuya@example.com
+                            </p>
+                            <p class="text-sm text-gray-600">
+                                <span class="font-medium">面接日:</span> 2024年10月12日 14:30
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
+                        メール送信
+                    </button>
+                    <button class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                        不採用にする
+                    </button>
+                    <button class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                        採用決定
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="p-8">
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Left Column -->
+                <div class="col-span-2 space-y-6">
+                    <!-- Overall Score -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-6">総合評価</h3>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-center">
+                                <div class="text-5xl font-bold text-primary-600 mb-2">80</div>
+                                <p class="text-sm text-gray-500">総合スコア</p>
+                            </div>
+                            <div class="flex-1 ml-12 space-y-4">
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-700">コミュニケーション</span>
+                                        <span class="text-sm font-semibold text-gray-900">85</span>
+                                    </div>
+                                    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-blue-500 rounded-full" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-700">技術力</span>
+                                        <span class="text-sm font-semibold text-gray-900">78</span>
+                                    </div>
+                                    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-green-500 rounded-full" style="width: 78%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-700">問題解決力</span>
+                                        <span class="text-sm font-semibold text-gray-900">82</span>
+                                    </div>
+                                    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-purple-500 rounded-full" style="width: 82%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex items-center justify-between mb-2">
+                                        <span class="text-sm font-medium text-gray-700">カルチャーフィット</span>
+                                        <span class="text-sm font-semibold text-gray-900">75</span>
+                                    </div>
+                                    <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
+                                        <div class="h-full bg-orange-500 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AI Analysis -->
+                    <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+                        <div class="flex items-start gap-3">
+                            <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <div class="flex-1">
+                                <h3 class="text-lg font-semibold text-blue-900 mb-3">AI総合分析</h3>
+                                <p class="text-sm text-blue-800 leading-relaxed mb-4">
+                                    岡本拓也さんは、フロントエンド開発における基礎知識が非常に豊富で、特にReactとTypeScriptに関する理解度が高いことが確認できました。大学での情報工学専攻とインターンシップ経験を通じて、実践的なスキルを身につけています。
+                                </p>
+                                <p class="text-sm text-blue-800 leading-relaxed mb-4">
+                                    コミュニケーション能力も優れており、技術的な内容を分かりやすく説明する力があります。チームワークを重視する姿勢が見られ、協調性も高いと評価できます。また、新しい技術やフレームワークへの学習意欲が非常に強く、自己成長への積極的な姿勢が印象的でした。
+                                </p>
+                                <div class="bg-white/50 rounded-lg p-4 border border-blue-200">
+                                    <p class="text-sm font-semibold text-blue-900 mb-2">🎯 採用推奨理由</p>
+                                    <ul class="text-sm text-blue-800 space-y-1">
+                                        <li>• 技術的な基礎力が高く、即戦力として活躍できる可能性が高い</li>
+                                        <li>• 学習意欲が強く、成長スピードが速いと予想される</li>
+                                        <li>• チームへの適応力があり、組織にフィットする人材</li>
+                                        <li>• ポートフォリオの質が高く、実務レベルのコードを書ける</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interview Q&A -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-6">面接内容</h3>
+                        <div class="space-y-6">
+                            <!-- Question 1 -->
+                            <div class="border-l-4 border-primary-600 pl-4">
+                                <div class="flex items-start justify-between mb-2">
+                                    <p class="text-sm font-semibold text-gray-900">Q1: 自己紹介とこれまでの経験について教えてください</p>
+                                    <span class="text-sm font-semibold text-green-600">85点</span>
+                                </div>
+                                <p class="text-sm text-gray-600 leading-relaxed mt-2">
+                                    大学では情報工学を専攻し、主にWebアプリケーション開発について学びました。特にReactとTypeScriptを使った開発に興味を持ち、独学で学習を進めてきました。大学2年生の時から、スタートアップ企業でインターンとして働き、実際のプロダクト開発にも携わりました。その中で、ユーザー目線でのUI/UX設計の重要性を学び、技術だけでなくビジネス的な視点も養うことができました。
+                                </p>
+                            </div>
+
+                            <!-- Question 2 -->
+                            <div class="border-l-4 border-primary-600 pl-4">
+                                <div class="flex items-start justify-between mb-2">
+                                    <p class="text-sm font-semibold text-gray-900">Q2: Reactの仮想DOMについて説明してください</p>
+                                    <span class="text-sm font-semibold text-green-600">78点</span>
+                                </div>
+                                <p class="text-sm text-gray-600 leading-relaxed mt-2">
+                                    仮想DOMは、実際のDOMツリーを軽量なJavaScriptオブジェクトとして表現したものです。Reactでは、状態が変更されると新しい仮想DOMツリーを作成し、前の仮想DOMツリーと比較（差分検出）することで、実際のDOMに対する最小限の変更を計算します。これにより、パフォーマンスの向上が実現されます。差分アルゴリズムはO(n)の計算量で動作するため、大規模なアプリケーションでも効率的です。
+                                </p>
+                            </div>
+
+                            <!-- Question 3 -->
+                            <div class="border-l-4 border-primary-600 pl-4">
+                                <div class="flex items-start justify-between mb-2">
+                                    <p class="text-sm font-semibold text-gray-900">Q3: チームで開発する際に大切にしていることは何ですか</p>
+                                    <span class="text-sm font-semibold text-green-600">90点</span>
+                                </div>
+                                <p class="text-sm text-gray-600 leading-relaxed mt-2">
+                                    コミュニケーションとドキュメント化を特に大切にしています。インターンの経験から、コードレビューでは建設的なフィードバックを心がけ、自分の意図を明確に伝えることを意識しています。また、複雑な実装を行う際は、設計ドキュメントを先に作成し、チームメンバーと認識を合わせるようにしています。問題が発生した時は、すぐにチームに共有し、一人で抱え込まないことも重要だと考えています。
+                                </p>
+                            </div>
+
+                            <!-- Question 4 -->
+                            <div class="border-l-4 border-primary-600 pl-4">
+                                <div class="flex items-start justify-between mb-2">
+                                    <p class="text-sm font-semibold text-gray-900">Q4: 最近取り組んだプロジェクトについて教えてください</p>
+                                    <span class="text-sm font-semibold text-green-600">82点</span>
+                                </div>
+                                <p class="text-sm text-gray-600 leading-relaxed mt-2">
+                                    大学の卒業制作として、タスク管理アプリケーションを開発しました。フロントエンドはReact + TypeScript + Tailwind CSS、バックエンドはNode.js + Expressで構築し、データベースにはPostgreSQLを使用しました。認証にはJWTを実装し、リアルタイム通信にはWebSocketを採用しました。このプロジェクトを通じて、フルスタック開発の経験を積むことができ、特にステート管理の複雑さとパフォーマンス最適化の難しさを学びました。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="space-y-6">
+                    <!-- Status -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-4">ステータス</h3>
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">評価ステータス</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                    <option>未設定</option>
+                                    <option selected>採用</option>
+                                    <option>不採用</option>
+                                    <option>待機</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">面接状況</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                    <option selected>完遂</option>
+                                    <option>途中経過</option>
+                                    <option>未実施</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Basic Info -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-4">基本情報</h3>
+                        <div class="space-y-3 text-sm">
+                            <div>
+                                <p class="text-gray-500 text-xs mb-1">応募日</p>
+                                <p class="text-gray-900">2024年10月5日</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-xs mb-1">カテゴリー</p>
+                                <p class="text-gray-900">新卒</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-xs mb-1">募集職種</p>
+                                <p class="text-gray-900">フロントエンドエンジニア</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-xs mb-1">学歴</p>
+                                <p class="text-gray-900">○○大学 情報工学部</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500 text-xs mb-1">卒業予定</p>
+                                <p class="text-gray-900">2025年3月</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Files -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-4">添付ファイル</h3>
+                        <div class="space-y-2">
+                            <a href="#" class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg">
+                                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">履歴書.pdf</p>
+                                    <p class="text-xs text-gray-500">245 KB</p>
+                                </div>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg">
+                                <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">職務経歴書.pdf</p>
+                                    <p class="text-xs text-gray-500">189 KB</p>
+                                </div>
+                            </a>
+                            <a href="#" class="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg">
+                                <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                                </svg>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">ポートフォリオサイト</p>
+                                    <p class="text-xs text-gray-500">外部リンク</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="bg-white rounded-lg border border-gray-200 p-6">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-4">メモ</h3>
+                        <textarea rows="4" placeholder="メモを追加..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent"></textarea>
+                        <button class="mt-2 w-full px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm font-medium">
+                            保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>レポート - People X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#4338ca',
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            600: '#4338ca',
+                            700: '#3730a3',
+                            800: '#312e81',
+                        },
+                        sidebar: {
+                            bg: '#2d1b69',
+                            active: '#3730a3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Sidebar Container -->
+    <div id="sidebar-container"></div>
+    <script src="sidebar.js"></script>
+
+
+    <!-- Main Content -->
+    <main class="ml-60 min-h-screen">
+        <header class="bg-white border-b border-gray-200 px-8 py-6">
+            <h1 class="text-2xl font-semibold text-gray-900">面接レポート</h1>
+            <p class="text-sm text-gray-500 mt-1">AI分析による面接評価レポート</p>
+        </header>
+
+        <div class="p-8">
+            <!-- Stats Overview -->
+            <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">総面接数</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-2">127</p>
+                        </div>
+                        <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">平均評価</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-2">73.5</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">採用決定</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-2">32</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-500">不採用</p>
+                            <p class="text-3xl font-bold text-gray-900 mt-2">45</p>
+                        </div>
+                        <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Reports -->
+            <div class="bg-white rounded-lg border border-gray-200">
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <h2 class="text-lg font-semibold text-gray-900">最新のレポート</h2>
+                </div>
+
+                <div class="divide-y divide-gray-200">
+                    <!-- Report Item 1 -->
+                    <div class="p-6 hover:bg-gray-50 transition cursor-pointer">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">岡本拓也</h3>
+                                    <span class="text-sm text-gray-500">フロントエンドエンジニア（新卒）</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">採用推奨</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-3">面接日: 2024/10/12 | 面接官: AI面接システム</p>
+
+                                <!-- Score Breakdown -->
+                                <div class="grid grid-cols-4 gap-4 mb-4">
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">コミュニケーション</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-blue-500" style="width: 85%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">85</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">技術力</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-green-500" style="width: 78%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">78</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">問題解決力</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-purple-500" style="width: 82%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">82</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">カルチャーフィット</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-orange-500" style="width: 75%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">75</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- AI Summary -->
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                        </svg>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium text-blue-900 mb-1">AI分析サマリー</p>
+                                            <p class="text-sm text-blue-800">
+                                                技術的な基礎知識が豊富で、Reactの理解度が高い。コミュニケーション能力も優れており、チームワークを重視する姿勢が見られる。成長意欲が強く、新しい技術への学習姿勢も積極的。フロントエンド開発における実務経験は限られているが、ポテンシャルが非常に高いため、採用を強く推奨します。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ml-6 text-right">
+                                <div class="text-3xl font-bold text-gray-900 mb-1">80</div>
+                                <p class="text-xs text-gray-500">総合評価</p>
+                                <button class="mt-4 px-4 py-2 text-sm text-primary-600 hover:text-primary-700 border border-primary-600 rounded-lg hover:bg-primary-50 transition">
+                                    詳細を見る
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Report Item 2 -->
+                    <div class="p-6 hover:bg-gray-50 transition cursor-pointer">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">田中美奈子</h3>
+                                    <span class="text-sm text-gray-500">バックエンドエンジニア（アルバイト）</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">採用推奨</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-3">面接日: 2024/10/12 | 面接官: AI面接システム</p>
+
+                                <div class="grid grid-cols-4 gap-4 mb-4">
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">コミュニケーション</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-blue-500" style="width: 80%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">80</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">技術力</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-green-500" style="width: 82%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">82</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">問題解決力</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-purple-500" style="width: 78%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">78</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">カルチャーフィット</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-orange-500" style="width: 80%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">80</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                        </svg>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium text-blue-900 mb-1">AI分析サマリー</p>
+                                            <p class="text-sm text-blue-800">
+                                                Node.jsとPythonの実務経験があり、データベース設計の知識も豊富。論理的思考力が高く、複雑な問題に対して体系的なアプローチができる。アルバイトとしての採用に最適な候補者です。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ml-6 text-right">
+                                <div class="text-3xl font-bold text-gray-900 mb-1">80</div>
+                                <p class="text-xs text-gray-500">総合評価</p>
+                                <button class="mt-4 px-4 py-2 text-sm text-primary-600 hover:text-primary-700 border border-primary-600 rounded-lg hover:bg-primary-50 transition">
+                                    詳細を見る
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Report Item 3 -->
+                    <div class="p-6 hover:bg-gray-50 transition cursor-pointer">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <h3 class="text-lg font-semibold text-gray-900">鈴木昌</h3>
+                                    <span class="text-sm text-gray-500">法務（中途）</span>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">高評価</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-3">面接日: 2024/10/12 | 面接官: AI面接システム</p>
+
+                                <div class="grid grid-cols-4 gap-4 mb-4">
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">コミュニケーション</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-blue-500" style="width: 95%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">95</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">専門知識</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-green-500" style="width: 100%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">100</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">問題解決力</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-purple-500" style="width: 98%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">98</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs text-gray-500 mb-1">カルチャーフィット</p>
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-orange-500" style="width: 95%"></div>
+                                            </div>
+                                            <span class="text-sm font-semibold text-gray-900">95</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <div class="flex items-start gap-2">
+                                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                        </svg>
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium text-blue-900 mb-1">AI分析サマリー</p>
+                                            <p class="text-sm text-blue-800">
+                                                法律事務所での豊富な実務経験があり、企業法務に精通している。契約書作成や法的リスク管理の知識が非常に高い。コンプライアンス意識が強く、即戦力として活躍できる優秀な候補者。即採用を推奨します。
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="ml-6 text-right">
+                                <div class="text-3xl font-bold text-gray-900 mb-1">100</div>
+                                <p class="text-xs text-gray-500">総合評価</p>
+                                <button class="mt-4 px-4 py-2 text-sm text-primary-600 hover:text-primary-700 border border-primary-600 rounded-lg hover:bg-primary-50 transition">
+                                    詳細を見る
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>応募者 - People X</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#4338ca',
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            600: '#4338ca',
+                            700: '#3730a3',
+                            800: '#312e81',
+                        },
+                        sidebar: {
+                            bg: '#2d1b69',
+                            active: '#3730a3',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50">
+    <!-- Sidebar -->
+    <aside class="fixed left-0 top-0 h-screen w-60 bg-sidebar-bg text-white flex flex-col">
+        <!-- Logo -->
+        <div class="p-4 border-b border-white/10">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-white rounded flex items-center justify-center">
+                    <svg class="w-5 h-5 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                        <path fill-rule="evenodd"
+                            d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <span class="font-semibold text-lg">People X</span>
+            </div>
+            <div class="text-xs text-white/60 mt-1 ml-10">管理画面</div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 py-4">
+            <a href="index.html"
+                class="flex items-center gap-3 px-4 py-2.5 bg-sidebar-active text-white border-l-4 border-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <span>応募者</span>
+            </a>
+            <a href="jobs.html"
+                class="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:bg-white/5 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span>求人</span>
+            </a>
+            <a href="questions.html"
+                class="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:bg-white/5 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>質問</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:bg-white/5 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>レポート</span>
+            </a>
+            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-white/80 hover:bg-white/5 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>設定</span>
+            </a>
+        </nav>
+
+        <!-- Collapse Button -->
+        <div class="p-4 border-t border-white/10">
+            <button class="flex items-center gap-2 text-sm text-white/80 hover:text-white w-full">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                </svg>
+                <span>折りたたむ</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="ml-60 h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-white border-b border-gray-200 px-8 py-4 flex-shrink-0">
+            <div class="flex items-center justify-between">
+                <div class="flex-1">
+                    <div class="relative">
+                        <input type="text" placeholder="検索してください"
+                            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                </div>
+                <button class="ml-4 px-6 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition">
+                    検索
+                </button>
+            </div>
+
+            <!-- Filters -->
+            <div class="flex items-center gap-4 mt-4">
+                <select id="filterStatus" onchange="applyFilters()"
+                    class="px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                    <option value="">すべて</option>
+                    <option value="未設定">未設定</option>
+                    <option value="完遂">完遂</option>
+                    <option value="採用">採用</option>
+                    <option value="不採用">不採用</option>
+                    <option value="待機">待機</option>
+                </select>
+                <select id="filterInterview" onchange="applyFilters()"
+                    class="px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                    <option value="">すべて</option>
+                    <option value="完遂">完遂</option>
+                    <option value="途中経過">途中経過</option>
+                </select>
+                <select id="filterCategory" onchange="applyFilters()"
+                    class="px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
+                    <option value="">すべて</option>
+                    <option value="新卒">新卒</option>
+                    <option value="中途">中途</option>
+                    <option value="アルバイト">アルバイト</option>
+                </select>
+                <div class="relative">
+                    <button id="filterOptionsBtn" onclick="toggleFilterPopup()"
+                        class="px-4 py-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                        </svg>
+                        フィルターオプション
+                    </button>
+
+                    <!-- Filter Popup -->
+                    <div id="filterPopup" class="hidden absolute top-full mt-2 right-0 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900 mb-4">募集職種名</h3>
+                            <div class="space-y-2 max-h-80 overflow-y-auto">
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" value="法務" class="position-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                    <span class="text-sm text-gray-700">法務</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" value="人事" class="position-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                    <span class="text-sm text-gray-700">人事</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" value="事務" class="position-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                    <span class="text-sm text-gray-700">事務</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" value="フロントエンドエンジニア" class="position-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                    <span class="text-sm text-gray-700">開発（フロントエンド）</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" value="バックエンドエンジニア" class="position-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                    <span class="text-sm text-gray-700">開発（バックエンド）</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" value="デザイナー" class="position-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                    <span class="text-sm text-gray-700">デザイナー</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                    <input type="checkbox" value="広報・PR" class="position-checkbox w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500">
+                                    <span class="text-sm text-gray-700">広報・PR</span>
+                                </label>
+                            </div>
+                            <div class="flex gap-2 mt-4 pt-4 border-t border-gray-200">
+                                <button onclick="clearPositionFilter()" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 hover:bg-gray-50">
+                                    クリア
+                                </button>
+                                <button onclick="confirmPositionFilter()" class="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700">
+                                    決定
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Data Table -->
+        <div class="flex-1 p-4 overflow-hidden">
+            <div class="bg-white rounded-lg shadow h-full flex flex-col">
+                <div class="flex-1 overflow-x-auto overflow-y-auto" id="tableContainer">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    評価ステータス</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    面接状況</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    カテゴリー</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    募集職種名</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    応募者名</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    メールアドレス</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    面接日</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    総合評価</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicantsTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Data will be loaded dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination - Fixed at bottom -->
+        <div class="flex-shrink-0 bg-white border-t border-gray-200 px-8 py-4 shadow-lg">
+            <div class="flex items-center justify-between">
+                <div id="totalCount" class="text-sm text-gray-700">
+                    0 / 0件
+                </div>
+                <div class="flex gap-2">
+                    <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">1</button>
+                    <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">2</button>
+                    <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">3</button>
+                    <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">...</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Configuration
+        const ITEMS_PER_PAGE = 50;
+
+        // Filter state
+        let selectedPositions = [];
+
+        // All applicants data (mock database)
+        const allApplicantsData = [
+            {
+                status: '未設定',
+                interview: '完遂',
+                category: '新卒',
+                position: 'フロントエンドエンジニア',
+                name: '岡本拓也',
+                email: 'okamoto.takuya@example.com',
+                date: '2024/10/12',
+                score: 80,
+                rowClass: ''
+            },
+            {
+                status: '未設定',
+                interview: '完遂',
+                category: 'アルバイト',
+                position: 'バックエンドエンジニア',
+                name: '田中美奈子',
+                email: 'tanaka.minako@example.com',
+                date: '2024/10/12',
+                score: 80,
+                rowClass: ''
+            },
+            {
+                status: '未設定',
+                interview: '完遂',
+                category: '中途',
+                position: '法務',
+                name: '鈴木昌',
+                email: 'suzuki.masashi@example.com',
+                date: '2024/10/12',
+                score: 100,
+                rowClass: ''
+            },
+            {
+                status: '未設定',
+                interview: '途中経過 (2/5)',
+                category: '中途',
+                position: '広報・PR',
+                name: '伊藤遥',
+                email: 'ito.haruka@example.com',
+                date: '2024/10/12',
+                score: 60,
+                rowClass: ''
+            },
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: 'アルバイト',
+                position: '人事',
+                name: '藤原明大',
+                email: 'fujiwara.akita@example.com',
+                date: '2024/10/12',
+                score: 100,
+                rowClass: 'bg-green-50'
+            },
+            {
+                status: '不採用',
+                interview: '完遂',
+                category: 'アルバイト',
+                position: '広報・PR',
+                name: '中嶋明日',
+                email: 'nakajima.asuka@example.com',
+                date: '2024/10/12',
+                score: 40,
+                rowClass: ''
+            },
+            {
+                status: '不採用',
+                interview: '完遂',
+                category: 'アルバイト',
+                position: '事務',
+                name: '田中明日香',
+                email: 'tanaka.asuka@example.com',
+                date: '2024/10/12',
+                score: 50,
+                rowClass: ''
+            },
+            {
+                status: '待機',
+                statusBadge: true,
+                statusClass: 'bg-yellow-100 text-yellow-800',
+                interview: '途中経過 (2/5)',
+                category: '中途',
+                position: 'デザイナー',
+                name: '宝来正樹',
+                email: 'horai.masaki@example.com',
+                date: '2024/10/12',
+                score: 70,
+                rowClass: 'bg-yellow-50'
+            },
+            {
+                status: '待機',
+                statusBadge: true,
+                statusClass: 'bg-yellow-100 text-yellow-800',
+                interview: '途中経過 (3/5)',
+                category: '新卒',
+                position: 'フロントエンドエンジニア',
+                name: '山下優里子',
+                email: 'yamashita.yuriko@example.com',
+                date: '2024/10/12',
+                score: 50,
+                rowClass: 'bg-yellow-50'
+            },
+            {
+                status: '未設定',
+                interview: '完遂',
+                category: '新卒',
+                position: 'データサイエンティスト',
+                name: '佐藤健太',
+                email: 'sato.kenta@example.com',
+                date: '2024/10/13',
+                score: 85,
+                rowClass: ''
+            },
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '中途',
+                position: 'プロダクトマネージャー',
+                name: '高橋真理',
+                email: 'takahashi.mari@example.com',
+                date: '2024/10/13',
+                score: 95,
+                rowClass: 'bg-green-50'
+            },
+            {
+                status: '未設定',
+                interview: '完遂',
+                category: 'アルバイト',
+                position: 'カスタマーサポート',
+                name: '渡辺花子',
+                email: 'watanabe.hanako@example.com',
+                date: '2024/10/13',
+                score: 75,
+                rowClass: ''
+            },
+            {
+                status: '待機',
+                statusBadge: true,
+                statusClass: 'bg-yellow-100 text-yellow-800',
+                interview: '途中経過 (1/5)',
+                category: '新卒',
+                position: 'マーケティング',
+                name: '小林直樹',
+                email: 'kobayashi.naoki@example.com',
+                date: '2024/10/14',
+                score: 65,
+                rowClass: 'bg-yellow-50'
+            },
+            {
+                status: '不採用',
+                interview: '完遂',
+                category: '中途',
+                position: 'セールス',
+                name: '加藤美咲',
+                email: 'kato.misaki@example.com',
+                date: '2024/10/14',
+                score: 45,
+                rowClass: ''
+            },
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '新卒',
+                position: 'UXデザイナー',
+                name: '山本太郎',
+                email: 'yamamoto.taro@example.com',
+                date: '2024/10/14',
+                score: 90,
+                rowClass: 'bg-green-50'
+            },
+            {
+                status: '未設定',
+                interview: '完遂',
+                category: '新卒',
+                position: 'iOS開発',
+                name: '石井麻衣',
+                email: 'ishii.mai@example.com',
+                date: '2024/10/15',
+                score: 88,
+                rowClass: ''
+            },
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '中途',
+                position: 'Android開発',
+                name: '木村優斗',
+                email: 'kimura.yuto@example.com',
+                date: '2024/10/15',
+                score: 92,
+                rowClass: 'bg-green-50'
+            },
+            {
+                status: '待機',
+                statusBadge: true,
+                statusClass: 'bg-yellow-100 text-yellow-800',
+                interview: '途中経過 (4/5)',
+                category: 'アルバイト',
+                position: 'QAテスター',
+                name: '林美香',
+                email: 'hayashi.mika@example.com',
+                date: '2024/10/15',
+                score: 68,
+                rowClass: 'bg-yellow-50'
+            },
+            {
+                status: '不採用',
+                interview: '完遂',
+                category: '新卒',
+                position: 'インフラエンジニア',
+                name: '松本健',
+                email: 'matsumoto.ken@example.com',
+                date: '2024/10/16',
+                score: 42,
+                rowClass: ''
+            },
+            {
+                status: '未設定',
+                interview: '完遂',
+                category: '中途',
+                position: 'DevOpsエンジニア',
+                name: '井上さくら',
+                email: 'inoue.sakura@example.com',
+                date: '2024/10/16',
+                score: 87,
+                rowClass: ''
+            },
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '新卒',
+                position: 'データアナリスト',
+                name: '中村大輔',
+                email: 'nakamura.daisuke@example.com',
+                date: '2024/10/16',
+                score: 94,
+                rowClass: 'bg-green-50'
+            },
+            {
+                status: '未設定',
+                interview: '途中経過 (2/5)',
+                category: 'アルバイト',
+                position: 'コンテンツライター',
+                name: '清水愛',
+                email: 'shimizu.ai@example.com',
+                date: '2024/10/17',
+                score: 72,
+                rowClass: ''
+            },
+            {
+                status: '待機',
+                statusBadge: true,
+                statusClass: 'bg-yellow-100 text-yellow-800',
+                interview: '途中経過 (1/5)',
+                category: '中途',
+                position: 'プロジェクトマネージャー',
+                name: '斎藤隆',
+                email: 'saito.takashi@example.com',
+                date: '2024/10/17',
+                score: 78,
+                rowClass: 'bg-yellow-50'
+            },
+            {
+                status: '不採用',
+                interview: '完遂',
+                category: 'アルバイト',
+                position: '経理',
+                name: '森田由美',
+                email: 'morita.yumi@example.com',
+                date: '2024/10/17',
+                score: 38,
+                rowClass: ''
+            },
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '中途',
+                position: 'スクラムマスター',
+                name: '橋本誠',
+                email: 'hashimoto.makoto@example.com',
+                date: '2024/10/18',
+                score: 91,
+                rowClass: 'bg-green-50'
+            }
+            ,
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '中途',
+                position: 'スクラムマスター',
+                name: '橋本誠',
+                email: 'hashimoto.makoto@example.com',
+                date: '2024/10/18',
+                score: 91,
+                rowClass: 'bg-green-50'
+            }
+            ,
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '中途',
+                position: 'スクラムマスター',
+                name: '橋本誠',
+                email: 'hashimoto.makoto@example.com',
+                date: '2024/10/18',
+                score: 91,
+                rowClass: 'bg-green-50'
+            }
+            ,
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '中途',
+                position: 'スクラムマスター',
+                name: '橋本誠',
+                email: 'hashimoto.makoto@example.com',
+                date: '2024/10/18',
+                score: 91,
+                rowClass: 'bg-green-50'
+            }
+            ,
+            {
+                status: '採用',
+                statusBadge: true,
+                statusClass: 'bg-green-100 text-green-800',
+                interview: '完遂',
+                category: '中途',
+                position: 'スクラムマスター',
+                name: '橋本誠',
+                email: 'hashimoto.makoto@example.com',
+                date: '2024/10/18',
+                score: 91,
+                rowClass: 'bg-green-50'
+            }
+        ];
+
+        // Get current page from URL params
+        function getCurrentPage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const page = parseInt(urlParams.get('page')) || 1;
+            return page > 0 ? page : 1;
+        }
+
+        // Update URL with new page number
+        function updateURL(page) {
+            const url = new URL(window.location);
+            url.searchParams.set('page', page);
+            window.history.pushState({}, '', url);
+        }
+
+        // Filter data based on current filters
+        function getFilteredData() {
+            const statusFilter = document.getElementById('filterStatus').value;
+            const interviewFilter = document.getElementById('filterInterview').value;
+            const categoryFilter = document.getElementById('filterCategory').value;
+
+            let filtered = allApplicantsData.filter(applicant => {
+                // Status filter
+                if (statusFilter && applicant.status !== statusFilter) {
+                    return false;
+                }
+
+                // Interview filter (check if interview contains the filter value)
+                if (interviewFilter) {
+                    if (interviewFilter === '完遂' && !applicant.interview.includes('完遂')) {
+                        return false;
+                    }
+                    if (interviewFilter === '途中経過' && !applicant.interview.includes('途中経過')) {
+                        return false;
+                    }
+                }
+
+                // Category filter
+                if (categoryFilter && applicant.category !== categoryFilter) {
+                    return false;
+                }
+
+                // Position filter (multi-select)
+                if (selectedPositions.length > 0 && !selectedPositions.includes(applicant.position)) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            return filtered;
+        }
+
+        // Fetch paginated data (simulating API call)
+        function getApplicantsData(page = 1) {
+            const filteredData = getFilteredData();
+            const startIndex = (page - 1) * ITEMS_PER_PAGE;
+            const endIndex = startIndex + ITEMS_PER_PAGE;
+
+            return {
+                data: filteredData.slice(startIndex, endIndex),
+                total: filteredData.length,
+                currentPage: page,
+                totalPages: Math.ceil(filteredData.length / ITEMS_PER_PAGE),
+                itemsPerPage: ITEMS_PER_PAGE
+            };
+        }
+
+        // Render table rows
+        function renderTableRows(applicantsData) {
+            const tbody = document.getElementById('applicantsTableBody');
+            tbody.innerHTML = '';
+
+            applicantsData.forEach(applicant => {
+                const row = document.createElement('tr');
+                row.className = applicant.rowClass;
+
+                const statusCell = applicant.statusBadge
+                    ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${applicant.statusClass}">${applicant.status}</span>`
+                    : `<span class="text-sm text-gray-700">${applicant.status}</span>`;
+
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${statusCell}</td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-700">${applicant.interview}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-700">${applicant.category}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-700">${applicant.position}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-900 font-medium">${applicant.name}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-500">${applicant.email}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm text-gray-700">${applicant.date}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap"><span class="text-sm font-semibold text-gray-900">${applicant.score}</span></td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <button onclick="viewResult('${applicant.name}')" class="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            面接結果
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // Render pagination buttons
+        function renderPagination(paginationInfo) {
+            const { currentPage, totalPages, total, itemsPerPage } = paginationInfo;
+            const startItem = (currentPage - 1) * itemsPerPage + 1;
+            const endItem = Math.min(currentPage * itemsPerPage, total);
+
+            // Update count
+            document.getElementById('totalCount').textContent = `${startItem}-${endItem} / ${total}件`;
+
+            // Generate pagination buttons
+            const paginationContainer = document.getElementById('paginationButtons');
+            paginationContainer.innerHTML = '';
+
+            // Previous button
+            if (currentPage > 1) {
+                const prevBtn = document.createElement('button');
+                prevBtn.className = 'px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50';
+                prevBtn.textContent = '前へ';
+                prevBtn.onclick = () => goToPage(currentPage - 1);
+                paginationContainer.appendChild(prevBtn);
+            }
+
+            // Page numbers
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+            if (endPage - startPage < maxVisiblePages - 1) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+
+            // First page
+            if (startPage > 1) {
+                const firstBtn = document.createElement('button');
+                firstBtn.className = 'px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50';
+                firstBtn.textContent = '1';
+                firstBtn.onclick = () => goToPage(1);
+                paginationContainer.appendChild(firstBtn);
+
+                if (startPage > 2) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-2 text-gray-500';
+                    dots.textContent = '...';
+                    paginationContainer.appendChild(dots);
+                }
+            }
+
+            // Visible pages
+            for (let i = startPage; i <= endPage; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = i === currentPage
+                    ? 'px-3 py-1 border border-primary-600 rounded bg-primary-600 text-white'
+                    : 'px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50';
+                pageBtn.textContent = i;
+                pageBtn.onclick = () => goToPage(i);
+                paginationContainer.appendChild(pageBtn);
+            }
+
+            // Last page
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dots = document.createElement('span');
+                    dots.className = 'px-2 text-gray-500';
+                    dots.textContent = '...';
+                    paginationContainer.appendChild(dots);
+                }
+
+                const lastBtn = document.createElement('button');
+                lastBtn.className = 'px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50';
+                lastBtn.textContent = totalPages;
+                lastBtn.onclick = () => goToPage(totalPages);
+                paginationContainer.appendChild(lastBtn);
+            }
+
+            // Next button
+            if (currentPage < totalPages) {
+                const nextBtn = document.createElement('button');
+                nextBtn.className = 'px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50';
+                nextBtn.textContent = '次へ';
+                nextBtn.onclick = () => goToPage(currentPage + 1);
+                paginationContainer.appendChild(nextBtn);
+            }
+        }
+
+        // Go to specific page
+        function goToPage(page) {
+            updateURL(page);
+            loadPage(page);
+        }
+
+        // Load page data
+        function loadPage(page) {
+            const paginationInfo = getApplicantsData(page);
+            renderTableRows(paginationInfo.data);
+            renderPagination(paginationInfo);
+        }
+
+        // View result
+        function viewResult(name) {
+            window.location.href = 'applicant-detail.html';
+        }
+
+        // Toggle filter popup
+        function toggleFilterPopup() {
+            const popup = document.getElementById('filterPopup');
+            popup.classList.toggle('hidden');
+        }
+
+        // Close popup when clicking outside
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('filterPopup');
+            const btn = document.getElementById('filterOptionsBtn');
+            if (popup && btn && !popup.contains(event.target) && !btn.contains(event.target)) {
+                popup.classList.add('hidden');
+            }
+        });
+
+        // Confirm position filter (when clicking 決定 button)
+        function confirmPositionFilter() {
+            const checkboxes = document.querySelectorAll('.position-checkbox');
+            selectedPositions = Array.from(checkboxes)
+                .filter(cb => cb.checked)
+                .map(cb => cb.value);
+            toggleFilterPopup();
+            applyFilters();
+        }
+
+        // Clear position filter
+        function clearPositionFilter() {
+            const checkboxes = document.querySelectorAll('.position-checkbox');
+            checkboxes.forEach(cb => cb.checked = false);
+            selectedPositions = [];
+            applyFilters();
+        }
+
+        // Apply all filters
+        function applyFilters() {
+            goToPage(1); // Reset to page 1 when filters change
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const tableContainer = document.getElementById('tableContainer');
+            const thead = tableContainer.querySelector('thead');
+
+            // Make header sticky
+            thead.style.position = 'sticky';
+            thead.style.top = '0';
+            thead.style.zIndex = '10';
+
+            // Load current page from URL
+            const currentPage = getCurrentPage();
+            loadPage(currentPage);
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', function () {
+            const currentPage = getCurrentPage();
+            loadPage(currentPage);
+        });
+    </script>
+</body>
+
+</html>
