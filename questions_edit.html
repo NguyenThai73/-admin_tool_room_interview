@@ -94,17 +94,151 @@
             ];
         }
 
-        async function populateCreateForm() {
+        // Mock data for templates - Matching questions.html structure
+        const FIXED_TEMPLATES = [
+            {
+                id: 1,
+                title: '新卒フロントエンドエンジニア面接テンプレート',
+                description: '基礎的な技術知識とポテンシャルを確認する面接セット',
+                tenant_id: 1,
+                industry_id: 1, // IT・Web
+                job_type_id: 1, // フロントエンドエンジニア
+                category_id: 1, // 新卒
+                tags: ['技術', '基礎', 'ポテンシャル'],
+                questions: [
+                    { question_set_id: 1, question_index: 0, question: '自己紹介をお願いします。プログラミングを始めたきっかけも教えてください。', duration: 120, purpose: 'アイスブレイク・背景理解' },
+                    { question_set_id: 1, question_index: 1, question: 'HTMLとCSSの基礎知識について、具体例を挙げて説明してください。', duration: 90, purpose: '基礎技術の確認' },
+                    { question_set_id: 1, question_index: 2, question: 'これまでに作成したWebアプリケーションについて教えてください。どのような技術を使いましたか？', duration: 150, purpose: '実践経験の確認' },
+                    { question_set_id: 1, question_index: 3, question: 'チームでの開発経験があれば教えてください。どのような役割を担いましたか？', duration: 120, purpose: '協調性の確認' },
+                    { question_set_id: 1, question_index: 4, question: '最近のフロントエンド技術について、興味のあるものとその理由を教えてください。', duration: 120, purpose: '学習意欲の確認' },
+                    { question_set_id: 1, question_index: 5, question: '将来、フロントエンドエンジニアとしてどのように成長したいですか？', duration: 120, purpose: 'キャリア志向性の確認' }
+                ]
+            },
+            {
+                id: 2,
+                title: '新卒バックエンドエンジニア面接テンプレート',
+                description: 'サーバーサイドの基礎知識と論理的思考力を確認',
+                tenant_id: 1,
+                industry_id: 1, // IT・Web
+                job_type_id: 2, // バックエンドエンジニア
+                category_id: 1, // 新卒
+                tags: ['技術', '基礎', '論理思考'],
+                questions: [
+                    { question_set_id: 2, question_index: 0, question: '自己紹介をお願いします。プログラミングを始めたきっかけも教えてください。', duration: 180, purpose: 'アイスブレイク・背景理解' },
+                    { question_set_id: 2, question_index: 1, question: 'データベースの基礎知識について説明してください。SQLとNoSQLの違いは？', duration: 120, purpose: '基礎技術の確認' },
+                    { question_set_id: 2, question_index: 2, question: 'これまでに開発したAPIやバックエンドシステムについて教えてください。', duration: 180, purpose: '実践経験の確認' },
+                    { question_set_id: 2, question_index: 3, question: 'サーバーサイドでのエラーハンドリングについて、どのように考えていますか？', duration: 150, purpose: '技術的思考の確認' },
+                    { question_set_id: 2, question_index: 4, question: '最近のバックエンド技術について、興味のあるものとその理由を教えてください。', duration: 120, purpose: '学習意欲の確認' },
+                    { question_set_id: 2, question_index: 5, question: '将来、バックエンドエンジニアとしてどのように成長したいですか？', duration: 150, purpose: 'キャリア志向性の確認' }
+                ]
+            },
+            {
+                id: 3,
+                title: '中途UI/UXデザイナー面接テンプレート',
+                description: 'デザインプロセスとユーザー視点の理解度を確認',
+                tenant_id: 1,
+                industry_id: 5, // デザイン
+                job_type_id: 3, // UI/UXデザイナー
+                category_id: 2, // 中途
+                tags: ['デザイン思考', 'UX', '実務経験'],
+                questions: [
+                    { question_set_id: 3, question_index: 0, question: 'これまでのデザイン経験について教えてください。', duration: 180, purpose: '経験の確認' },
+                    { question_set_id: 3, question_index: 1, question: 'ユーザー調査やユーザビリティテストの経験はありますか？', duration: 150, purpose: 'UXプロセスの理解' },
+                    { question_set_id: 3, question_index: 2, question: 'デザインシステムやコンポーネントライブラリの構築経験について教えてください。', duration: 180, purpose: '実務経験の確認' },
+                    { question_set_id: 3, question_index: 3, question: 'エンジニアとの協働で大切にしていることは何ですか？', duration: 120, purpose: 'コラボレーション能力' },
+                    { question_set_id: 3, question_index: 4, question: '最近のUIトレンドで気になっているものはありますか？', duration: 120, purpose: '業界知識・関心度' },
+                    { question_set_id: 3, question_index: 5, question: 'デザイナーとしてのキャリアビジョンを教えてください。', duration: 150, purpose: 'キャリア志向性の確認' }
+                ]
+            },
+            {
+                id: 4,
+                title: '中途法人営業面接テンプレート',
+                description: '営業スキルと顧客対応力を総合的に評価',
+                tenant_id: 1,
+                industry_id: 2, // 営業・販売
+                job_type_id: 4, // 法人営業
+                category_id: 2, // 中途
+                tags: ['営業力', '対人スキル', '実績'],
+                questions: [
+                    { question_set_id: 4, question_index: 0, question: 'これまでの営業経験について教えてください。', duration: 180, purpose: '経験の確認' },
+                    { question_set_id: 4, question_index: 1, question: '最も印象に残っている成約事例を教えてください。', duration: 180, purpose: '営業力の確認' },
+                    { question_set_id: 4, question_index: 2, question: '新規開拓と既存顧客対応、どちらが得意ですか？その理由も教えてください。', duration: 150, purpose: '営業スタイルの理解' },
+                    { question_set_id: 4, question_index: 3, question: '顧客との信頼関係を築くために心がけていることは何ですか？', duration: 120, purpose: '対人スキルの確認' },
+                    { question_set_id: 4, question_index: 4, question: '目標未達成だった経験と、そこから学んだことを教えてください。', duration: 150, purpose: '課題対応力の確認' },
+                    { question_set_id: 4, question_index: 5, question: '今後のキャリアプランについて教えてください。', duration: 120, purpose: 'キャリア志向性の確認' },
+                    { question_set_id: 4, question_index: 6, question: '当社の製品・サービスについてどのような印象を持っていますか？', duration: 180, purpose: '企業理解度の確認' }
+                ]
+            },
+            {
+                id: 5,
+                title: 'アルバイト広報・PR面接テンプレート',
+                description: 'コミュニケーション能力と基本的なPRセンスを確認',
+                tenant_id: 1,
+                industry_id: 6, // マーケティング・広告
+                job_type_id: 5, // 広報・PR
+                category_id: 3, // アルバイト
+                tags: ['コミュニケーション', 'PR', 'SNS'],
+                questions: [
+                    { question_set_id: 5, question_index: 0, question: '自己紹介をお願いします。', duration: 120, purpose: 'アイスブレイク' },
+                    { question_set_id: 5, question_index: 1, question: 'SNSを使った情報発信の経験はありますか？', duration: 120, purpose: 'SNSスキルの確認' },
+                    { question_set_id: 5, question_index: 2, question: '最近気になった企業のPR活動やキャンペーンはありますか？', duration: 150, purpose: 'PR感度の確認' },
+                    { question_set_id: 5, question_index: 3, question: '文章を書くことは得意ですか？具体例があれば教えてください。', duration: 120, purpose: 'ライティングスキル' },
+                    { question_set_id: 5, question_index: 4, question: 'この仕事に興味を持った理由を教えてください。', duration: 150, purpose: '志望動機の確認' }
+                ]
+            },
+            {
+                id: 6,
+                title: 'アルバイト人事サポート面接テンプレート',
+                description: '事務処理能力と対人スキルの基本を確認',
+                tenant_id: 1,
+                industry_id: 4, // 人事・総務
+                job_type_id: 6, // 人事
+                category_id: 3, // アルバイト
+                tags: ['事務', '対人', 'サポート'],
+                questions: [
+                    { question_set_id: 6, question_index: 0, question: '自己紹介をお願いします。', duration: 120, purpose: 'アイスブレイク' },
+                    { question_set_id: 6, question_index: 1, question: '事務作業やデータ入力の経験はありますか？', duration: 120, purpose: '事務スキルの確認' },
+                    { question_set_id: 6, question_index: 2, question: 'PCスキル（Word、Excel等）のレベルを教えてください。', duration: 90, purpose: 'PCスキルの確認' },
+                    { question_set_id: 6, question_index: 3, question: '複数のタスクを同時に進める際、どのように優先順位をつけますか？', duration: 120, purpose: 'タスク管理能力' },
+                    { question_set_id: 6, question_index: 4, question: 'この仕事に応募した理由を教えてください。', duration: 150, purpose: '志望動機の確認' }
+                ]
+            }
+        ];
+
+        async function fetchTemplateData(templateId) {
+            // TODO: Replace with actual API call
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            const template = FIXED_TEMPLATES[templateId];
+            if (!template) {
+                throw new Error('Template not found');
+            }
+            return template;
+        }
+
+        async function populateEditForm() {
             try {
                 // Show loading
                 showLoading();
 
-                // Fetch all data in parallel
-                const [industries, jobTypes, categories, tags] = await Promise.all([
+                // Get template ID from URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const templateId = urlParams.get('id');
+
+                if (!templateId) {
+                    alert('テンプレートIDが指定されていません');
+                    window.location.href = 'questions.html';
+                    return;
+                }
+
+                // Fetch all data in parallel including template data
+                const [industries, jobTypes, categories, tags, templateData] = await Promise.all([
                     fetchIndustries(),
                     fetchJobTypes(),
                     fetchInterviewCategories(),
-                    fetchTags()
+                    fetchTags(),
+                    fetchTemplateData(parseInt(templateId))
                 ]);
 
                 // Store data in state
@@ -118,6 +252,42 @@
                 initializeJobTypeDropdown();
                 initializeCategoryDropdown();
                 initializeTagsModal();
+
+                // Populate form with template data
+                document.getElementById('title').value = templateData.title;
+                document.getElementById('description').value = templateData.description;
+
+                // Set selected values
+                state.selectedIndustry = templateData.industry_id;
+                selectIndustry(templateData.industry_id);
+
+                state.selectedJobType = templateData.job_type_id;
+                selectJobType(templateData.job_type_id);
+
+                state.selectedCategory = templateData.category_id;
+                selectCategory(templateData.category_id);
+
+                // Set selected tags
+                if (templateData.tags && templateData.tags.length > 0) {
+                    // Find tag IDs by title
+                    templateData.tags.forEach(tagTitle => {
+                        const tag = tags.find(t => t.title === tagTitle);
+                        if (tag) {
+                            state.selectedTags.push(tag.id);
+                        }
+                    });
+                    updateSelectedTagsDisplay();
+                }
+
+                // Load questions - convert from database format (seconds) to form format (minutes)
+                if (templateData.questions && templateData.questions.length > 0) {
+                    state.questions = templateData.questions.map(q => ({
+                        question: q.question,
+                        duration: Math.round(q.duration / 60), // Convert seconds to minutes
+                        purpose: q.purpose || ''
+                    }));
+                    renderQuestions();
+                }
 
                 // Hide loading
                 hideLoading();
@@ -590,7 +760,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            populateCreateForm();
+            populateEditForm();
             document.getElementById('addQuestionBtn').addEventListener('click', addQuestion);
             document.getElementById('saveTemplateBtn').addEventListener('click', saveTemplate);
         });
@@ -617,9 +787,9 @@
         <!-- Header -->
         <header class="bg-white border-b border-gray-200 px-8 py-6 sticky top-0 z-30">
             <div class="flex items-center justify-between">
-                <h1 class="text-2xl font-semibold text-gray-900" data-i18n="createInterviewTemplate">面接テンプレート作成</h1>
+                <h1 class="text-2xl font-semibold text-gray-900" data-i18n="editInterviewTemplate">面接テンプレート編集</h1>
             </div>
-            <p class="text-sm text-gray-500 mt-1" data-i18n="createNewTemplate">新しい面接テンプレートを作成します</p>
+            <p class="text-sm text-gray-500 mt-1" data-i18n="editExistingTemplate">既存の面接テンプレートを編集します</p>
         </header>
 
         <!-- Create Template Form -->

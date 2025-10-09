@@ -7,77 +7,121 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
     <script>
-        // Fixed data (mock)
+        // Helper function to calculate duration from questions array
+        function calculateDuration(questions) {
+            if (!questions || questions.length === 0) return '約0分';
+            const totalSeconds = questions.reduce((sum, q) => sum + q.duration, 0);
+            const totalMinutes = Math.round(totalSeconds / 60);
+            return `約${totalMinutes}分`;
+        }
+
+        // Helper function to get badge class - using primary color only
+        function getIndustryBadgeClass(industryTitle) {
+            return 'bg-primary-100 text-primary-800';
+        }
+
+        // Fixed data (mock) - All templates use consistent structure
         const FIXED_TEMPLATES = [
             {
-                categoryBadge: { text: 'IT・Web', class: 'bg-primary-100 text-primary-800' },
-                role: 'フロントエンドエンジニア',
-                type: '新卒',
-                duration: '約15分',
+                industry: { title: 'IT・Web', id: 1 },
+                jobType: { title: 'フロントエンドエンジニア', id: 1 },
+                category: { title: '新卒', id: 1 },
                 title: '新卒フロントエンドエンジニア面接テンプレート',
                 description: '基礎的な技術知識とポテンシャルを確認する面接セット',
-                tags: ['技術', '基礎', 'ポテンシャル'],
-                questionsCount: 6,
+                tags: [{ title: '技術', id: 1 }, { title: '基礎', id: 2 }, { title: 'ポテンシャル', id: 3 }],
                 questions: [
-                    { text: '自己紹介をお願いします。プログラミングを始めたきっかけも教えてください。', seconds: 120, tag: 'アイスブレイク・背景理解' },
-                    { text: 'HTMLとCSSの基礎知識について、具体例を挙げて説明してください。', seconds: 90, tag: '基礎技術の確認' },
-                    { text: 'これまでに作成したWebアプリケーションについて教えてください。どのような技術を使いましたか？', seconds: 150, tag: '実践経験の確認' },
-                    { text: 'チームでの開発経験があれば教えてください。どのような役割を担いましたか？', seconds: 120, tag: '協調性の確認' },
-                    { text: '最近のフロントエンド技術について、興味のあるものとその理由を教えてください。', seconds: 120, tag: '学習意欲の確認' },
-                    { text: '将来、フロントエンドエンジニアとしてどのように成長したいですか？', seconds: 120, tag: 'キャリア志向性の確認' }
+                    { question: '自己紹介をお願いします。プログラミングを始めたきっかけも教えてください。', duration: 120, purpose: 'アイスブレイク・背景理解' },
+                    { question: 'HTMLとCSSの基礎知識について、具体例を挙げて説明してください。', duration: 90, purpose: '基礎技術の確認' },
+                    { question: 'これまでに作成したWebアプリケーションについて教えてください。どのような技術を使いましたか？', duration: 150, purpose: '実践経験の確認' },
+                    { question: 'チームでの開発経験があれば教えてください。どのような役割を担いましたか？', duration: 120, purpose: '協調性の確認' },
+                    { question: '最近のフロントエンド技術について、興味のあるものとその理由を教えてください。', duration: 120, purpose: '学習意欲の確認' },
+                    { question: '将来、フロントエンドエンジニアとしてどのように成長したいですか？', duration: 120, purpose: 'キャリア志向性の確認' }
                 ]
             },
             {
-                categoryBadge: { text: 'IT・Web', class: 'bg-primary-100 text-primary-800' },
-                role: 'バックエンドエンジニア',
-                type: '新卒',
-                duration: '約15分',
+                industry: { title: 'IT・Web', id: 1 },
+                jobType: { title: 'バックエンドエンジニア', id: 2 },
+                category: { title: '新卒', id: 1 },
                 title: '新卒バックエンドエンジニア面接テンプレート',
                 description: 'サーバーサイドの基礎知識と論理的思考力を確認',
-                tags: ['技術', '基礎', '論理思考'],
-                questionsCount: 6
+                tags: [{ title: '技術', id: 1 }, { title: '基礎', id: 2 }, { title: '論理思考', id: 4 }],
+                questions: [
+                    { question: '自己紹介をお願いします。プログラミングを始めたきっかけも教えてください。', duration: 180, purpose: 'アイスブレイク・背景理解' },
+                    { question: 'データベースの基礎知識について説明してください。SQLとNoSQLの違いは？', duration: 120, purpose: '基礎技術の確認' },
+                    { question: 'これまでに開発したAPIやバックエンドシステムについて教えてください。', duration: 180, purpose: '実践経験の確認' },
+                    { question: 'サーバーサイドでのエラーハンドリングについて、どのように考えていますか？', duration: 150, purpose: '技術的思考の確認' },
+                    { question: '最近のバックエンド技術について、興味のあるものとその理由を教えてください。', duration: 120, purpose: '学習意欲の確認' },
+                    { question: '将来、バックエンドエンジニアとしてどのように成長したいですか？', duration: 150, purpose: 'キャリア志向性の確認' }
+                ]
             },
             {
-                categoryBadge: { text: 'デザイン', class: 'bg-purple-100 text-purple-800' },
-                role: 'UI/UXデザイナー',
-                type: '中途',
-                duration: '約20分',
+                industry: { title: 'デザイン', id: 5 },
+                jobType: { title: 'UI/UXデザイナー', id: 3 },
+                category: { title: '中途', id: 2 },
                 title: '中途UI/UXデザイナー面接テンプレート',
                 description: 'デザインプロセスとユーザー視点の理解度を確認',
-                tags: ['デザイン思考', 'UX', '実務経験'],
-                questionsCount: 8
+                tags: [{ title: 'デザイン思考', id: 5 }, { title: 'UX', id: 6 }, { title: '実務経験', id: 7 }],
+                questions: [
+                    { question: 'これまでのデザイン経験について教えてください。', duration: 180, purpose: '経験の確認' },
+                    { question: 'ユーザー調査やユーザビリティテストの経験はありますか？', duration: 150, purpose: 'UXプロセスの理解' },
+                    { question: 'デザインシステムやコンポーネントライブラリの構築経験について教えてください。', duration: 180, purpose: '実務経験の確認' },
+                    { question: 'エンジニアとの協働で大切にしていることは何ですか？', duration: 120, purpose: 'コラボレーション能力' },
+                    { question: '最近のUIトレンドで気になっているものはありますか？', duration: 120, purpose: '業界知識・関心度' },
+                    { question: 'デザイナーとしてのキャリアビジョンを教えてください。', duration: 150, purpose: 'キャリア志向性の確認' }
+                ]
             },
             {
-                categoryBadge: { text: '営業', class: 'bg-green-100 text-green-800' },
-                role: '法人営業',
-                type: '中途',
-                duration: '約18分',
+                industry: { title: '営業・販売', id: 2 },
+                jobType: { title: '法人営業', id: 4 },
+                category: { title: '中途', id: 2 },
                 title: '中途法人営業面接テンプレート',
                 description: '営業スキルと顧客対応力を総合的に評価',
-                tags: ['営業力', '対人スキル', '実績'],
-                questionsCount: 7
+                tags: [{ title: '営業力', id: 8 }, { title: '対人スキル', id: 9 }, { title: '実績', id: 10 }],
+                questions: [
+                    { question: 'これまでの営業経験について教えてください。', duration: 180, purpose: '経験の確認' },
+                    { question: '最も印象に残っている成約事例を教えてください。', duration: 180, purpose: '営業力の確認' },
+                    { question: '新規開拓と既存顧客対応、どちらが得意ですか？その理由も教えてください。', duration: 150, purpose: '営業スタイルの理解' },
+                    { question: '顧客との信頼関係を築くために心がけていることは何ですか？', duration: 120, purpose: '対人スキルの確認' },
+                    { question: '目標未達成だった経験と、そこから学んだことを教えてください。', duration: 150, purpose: '課題対応力の確認' },
+                    { question: '今後のキャリアプランについて教えてください。', duration: 120, purpose: 'キャリア志向性の確認' },
+                    { question: '当社の製品・サービスについてどのような印象を持っていますか？', duration: 180, purpose: '企業理解度の確認' }
+                ]
             },
             {
-                categoryBadge: { text: 'マーケティング', class: 'bg-orange-100 text-orange-800' },
-                role: '広報・PR',
-                type: 'アルバイト',
-                duration: '約12分',
+                industry: { title: 'マーケティング・広告', id: 6 },
+                jobType: { title: '広報・PR', id: 5 },
+                category: { title: 'アルバイト', id: 3 },
                 title: 'アルバイト広報・PR面接テンプレート',
                 description: 'コミュニケーション能力と基本的なPRセンスを確認',
-                tags: ['コミュニケーション', 'PR', 'SNS'],
-                questionsCount: 5
+                tags: [{ title: 'コミュニケーション', id: 11 }, { title: 'PR', id: 12 }, { title: 'SNS', id: 13 }],
+                questions: [
+                    { question: '自己紹介をお願いします。', duration: 120, purpose: 'アイスブレイク' },
+                    { question: 'SNSを使った情報発信の経験はありますか？', duration: 120, purpose: 'SNSスキルの確認' },
+                    { question: '最近気になった企業のPR活動やキャンペーンはありますか？', duration: 150, purpose: 'PR感度の確認' },
+                    { question: '文章を書くことは得意ですか？具体例があれば教えてください。', duration: 120, purpose: 'ライティングスキル' },
+                    { question: 'この仕事に興味を持った理由を教えてください。', duration: 150, purpose: '志望動機の確認' }
+                ]
             },
             {
-                categoryBadge: { text: '人事・総務', class: 'bg-blue-100 text-blue-800' },
-                role: '人事',
-                type: 'アルバイト',
-                duration: '約10分',
+                industry: { title: '人事・総務', id: 4 },
+                jobType: { title: '人事', id: 6 },
+                category: { title: 'アルバイト', id: 3 },
                 title: 'アルバイト人事サポート面接テンプレート',
                 description: '事務処理能力と対人スキルの基本を確認',
-                tags: ['事務', '対人', 'サポート'],
-                questionsCount: 5
+                tags: [{ title: '事務', id: 14 }, { title: '対人', id: 15 }, { title: 'サポート', id: 16 }],
+                questions: [
+                    { question: '自己紹介をお願いします。', duration: 120, purpose: 'アイスブレイク' },
+                    { question: '事務作業やデータ入力の経験はありますか？', duration: 120, purpose: '事務スキルの確認' },
+                    { question: 'PCスキル（Word、Excel等）のレベルを教えてください。', duration: 90, purpose: 'PCスキルの確認' },
+                    { question: '複数のタスクを同時に進める際、どのように優先順位をつけますか？', duration: 120, purpose: 'タスク管理能力' },
+                    { question: 'この仕事に応募した理由を教えてください。', duration: 150, purpose: '志望動機の確認' }
+                ]
             }
-        ];
+        ].map(template => ({
+            ...template,
+            duration: calculateDuration(template.questions),
+            questionsCount: template.questions ? template.questions.length : 0
+        }));
 
         function renderTemplates(templates) {
             const container = document.getElementById('templatesContainer');
@@ -86,16 +130,16 @@
 
             if (loading) loading.remove();
 
-            headerText.textContent = `${templates.length}件の面接テンプレート`;
+            headerText.textContent = `${templates.length} ${i18n.t('templatesCount')}`;
 
             container.innerHTML = templates.map((t, idx) => `
                 <div class="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-md transition">
                     <div class="flex items-start justify-between">
                         <div class="flex-1">
                             <div class="flex items-center gap-2 mb-2">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${t.categoryBadge.class}">${t.categoryBadge.text}</span>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">${t.role}</span>
-                                <span class="text-sm text-gray-600">${t.type}</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium ${getIndustryBadgeClass(t.industry.title)}">${t.industry.title}</span>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700">${t.jobType.title}</span>
+                                <span class="text-sm text-gray-600">${t.category.title}</span>
                                 <div class="flex items-center text-sm text-gray-500">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -105,8 +149,16 @@
                             </div>
                             <h3 class="text-lg font-semibold text-gray-900 mb-2">${t.title}</h3>
                             <p class="text-sm text-gray-600 mb-3">${t.description}</p>
-                            <div class="flex gap-2">
-                                ${t.tags.map(tag => `<span class=\"inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700\">${tag}</span>`).join('')}
+                            <div class="flex items-center gap-2 mb-3">
+                                <div class="flex gap-2 flex-1">
+                                    ${t.tags.map(tag => `<span class=\"inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-700\">${typeof tag === 'object' ? tag.title : tag}</span>`).join('')}
+                                </div>
+                                <button onclick="editTemplate(${idx})" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-700 bg-primary-50 hover:bg-primary-100 rounded-lg transition">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                    </svg>
+                                    <span data-i18n="edit">${i18n.t('edit')}</span>
+                                </button>
                             </div>
                             <button onclick="toggleQuestions(${idx})" class="mt-3 text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
                                 質問内容を見る（${t.questionsCount}問）
@@ -116,16 +168,16 @@
                             </button>
                             <div id="questions-${idx}" class="mt-4 hidden">
                                 <div class="border border-primary-200 rounded-md">
-                                    
+
                                     ${Array.isArray(t.questions) ? t.questions.map((q, i) => `
                                         <div class=\"flex items-start gap-4 px-4 py-4 ${i % 2 === 0 ? 'bg-gray-50' : ''}\">
                                             <div class=\"w-6 h-6 flex items-center justify-center rounded-full bg-primary-100 text-primary-700 text-xs font-semibold\">${i + 1}</div>
                                             <div class=\"flex-1\">
-                                                <div class=\"text-gray-900 text-sm\">${q.text}</div>
+                                                <div class=\"text-gray-900 text-sm\">${q.question}</div>
                                                 <div class=\"mt-1 flex items-center gap-3 text-xs text-gray-500\">
-                                                    <span>⏱ ${q.seconds}秒</span>
+                                                    <span>⏱ ${q.duration}秒</span>
                                                     <span>・</span>
-                                                    <span>${q.tag}</span>
+                                                    <span>${q.purpose}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,48 +196,277 @@
             el.classList.toggle('hidden');
         }
 
-        // Fixed options data for filters
-        function getFilterOptions() {
-            return {
-                industries: ['IT・Web', '営業・販売', 'サービス・飲食', '事務・管理', 'クリエイティブ', 'マーケティング・広告', '物流・倉庫'],
-                roles: ['フロントエンドエンジニア', 'バックエンドエンジニア', '営業', '接客', '事務', 'デザイナー', 'マーケティング', '軽作業'],
-                hireTypes: ['新卒', '中途', 'アルバイト']
-            };
+        function editTemplate(idx) {
+            // Redirect to edit page with template ID
+            window.location.href = `questions_edit.html?id=${idx}`;
         }
 
-        function populateFilterSelects() {
-            const { industries, roles, hireTypes } = getFilterOptions();
-            const industrySelect = document.getElementById('industrySelect');
-            const roleSelect = document.getElementById('roleSelect');
-            const hireTypeSelect = document.getElementById('hireTypeSelect');
+        // Fetch functions for filters - matching questions_create.html
+        async function fetchIndustries() {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return [
+                { id: 1, title: 'IT・Web' },
+                { id: 2, title: '営業・販売' },
+                { id: 3, title: 'サービス・飲食' },
+                { id: 4, title: '事務・管理' },
+                { id: 5, title: 'クリエイティブ' },
+                { id: 6, title: 'マーケティング・広告' },
+                { id: 7, title: '物流・倉庫' }
+            ];
+        }
 
-            if (industrySelect) {
-                industries.forEach(v => {
-                    const opt = document.createElement('option');
-                    opt.value = v;
-                    opt.textContent = v;
-                    industrySelect.appendChild(opt);
-                });
-            }
+        async function fetchJobTypes() {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return [
+                { id: 1, title: '新卒' },
+                { id: 2, title: '中途' },
+                { id: 3, title: 'アルバイト' },
+                { id: 4, title: '契約社員' },
+                { id: 5, title: '派遣' }
+            ];
+        }
 
-            if (roleSelect) {
-                roles.forEach(v => {
-                    const opt = document.createElement('option');
-                    opt.value = v;
-                    opt.textContent = v;
-                    roleSelect.appendChild(opt);
-                });
-            }
+        async function fetchInterviewCategories() {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return [
+                { id: 1, title: '技術面接' },
+                { id: 2, title: '人物面接' },
+                { id: 3, title: '実技面接' },
+                { id: 4, title: '最終面接' },
+                { id: 5, title: '一次面接' }
+            ];
+        }
 
-            if (hireTypeSelect) {
-                hireTypes.forEach(v => {
-                    const opt = document.createElement('option');
-                    opt.value = v;
-                    opt.textContent = v;
-                    hireTypeSelect.appendChild(opt);
-                });
+        const filterState = {
+            allIndustries: [],
+            allJobTypes: [],
+            allCategories: [],
+            selectedIndustry: null,
+            selectedJobType: null,
+            selectedCategory: null
+        };
+
+        function showLoading() {
+            document.getElementById('pageLoadingOverlay').classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            document.getElementById('pageLoadingOverlay').classList.add('hidden');
+        }
+
+        async function initializeFilters() {
+            try {
+                showLoading();
+
+                const [industries, jobTypes, categories] = await Promise.all([
+                    fetchIndustries(),
+                    fetchJobTypes(),
+                    fetchInterviewCategories()
+                ]);
+
+                filterState.allIndustries = industries;
+                filterState.allJobTypes = jobTypes;
+                filterState.allCategories = categories;
+
+                initializeIndustryDropdown();
+                initializeJobTypeDropdown();
+                initializeCategoryDropdown();
+
+                hideLoading();
+            } catch (error) {
+                console.error('Error loading filter data:', error);
+                hideLoading();
             }
         }
+
+        function closeAllFilterDropdowns() {
+            document.getElementById('industryDropdown')?.classList.add('hidden');
+            document.getElementById('jobTypeDropdown')?.classList.add('hidden');
+            document.getElementById('categoryDropdown')?.classList.add('hidden');
+        }
+
+        // Industry Dropdown
+        function initializeIndustryDropdown() {
+            const selectBtn = document.getElementById('industrySelectBtn');
+            const dropdown = document.getElementById('industryDropdown');
+            const searchInput = document.getElementById('industrySearch');
+
+            selectBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isHidden = dropdown.classList.contains('hidden');
+                closeAllFilterDropdowns();
+                if (isHidden) {
+                    dropdown.classList.remove('hidden');
+                    renderIndustryList();
+                    searchInput.focus();
+                }
+            });
+
+            searchInput.addEventListener('input', function(e) {
+                renderIndustryList(e.target.value);
+            });
+
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+
+        function renderIndustryList(searchTerm = '') {
+            const container = document.getElementById('industryList');
+            const filtered = filterState.allIndustries.filter(item =>
+                item.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            const allOption = '<div class="px-3 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectIndustry(null)">全て</div>';
+            const itemsHtml = filtered.map(item => `
+                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer ${filterState.selectedIndustry === item.id ? 'bg-primary-50 text-primary-700' : ''}" onclick="selectIndustry(${item.id})">
+                    ${item.title}
+                </div>
+            `).join('');
+
+            container.innerHTML = allOption + itemsHtml;
+        }
+
+        function selectIndustry(id) {
+            filterState.selectedIndustry = id;
+            const display = document.getElementById('industryDisplay');
+            if (id === null) {
+                display.textContent = i18n.t('all');
+                display.classList.add('text-gray-500');
+                display.classList.remove('text-gray-900');
+            } else {
+                const selected = filterState.allIndustries.find(i => i.id === id);
+                display.textContent = selected.title;
+                display.classList.remove('text-gray-500');
+                display.classList.add('text-gray-900');
+            }
+            document.getElementById('industryDropdown').classList.add('hidden');
+            // TODO: Apply filter
+        }
+
+        // Job Type Dropdown
+        function initializeJobTypeDropdown() {
+            const selectBtn = document.getElementById('jobTypeSelectBtn');
+            const dropdown = document.getElementById('jobTypeDropdown');
+            const searchInput = document.getElementById('jobTypeSearch');
+
+            selectBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isHidden = dropdown.classList.contains('hidden');
+                closeAllFilterDropdowns();
+                if (isHidden) {
+                    dropdown.classList.remove('hidden');
+                    renderJobTypeList();
+                    searchInput.focus();
+                }
+            });
+
+            searchInput.addEventListener('input', function(e) {
+                renderJobTypeList(e.target.value);
+            });
+
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+
+        function renderJobTypeList(searchTerm = '') {
+            const container = document.getElementById('jobTypeList');
+            const filtered = filterState.allJobTypes.filter(item =>
+                item.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            const allOption = '<div class="px-3 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectJobType(null)">全て</div>';
+            const itemsHtml = filtered.map(item => `
+                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer ${filterState.selectedJobType === item.id ? 'bg-primary-50 text-primary-700' : ''}" onclick="selectJobType(${item.id})">
+                    ${item.title}
+                </div>
+            `).join('');
+
+            container.innerHTML = allOption + itemsHtml;
+        }
+
+        function selectJobType(id) {
+            filterState.selectedJobType = id;
+            const display = document.getElementById('jobTypeDisplay');
+            if (id === null) {
+                display.textContent = i18n.t('all');
+                display.classList.add('text-gray-500');
+                display.classList.remove('text-gray-900');
+            } else {
+                const selected = filterState.allJobTypes.find(i => i.id === id);
+                display.textContent = selected.title;
+                display.classList.remove('text-gray-500');
+                display.classList.add('text-gray-900');
+            }
+            document.getElementById('jobTypeDropdown').classList.add('hidden');
+            // TODO: Apply filter
+        }
+
+        // Category Dropdown
+        function initializeCategoryDropdown() {
+            const selectBtn = document.getElementById('categorySelectBtn');
+            const dropdown = document.getElementById('categoryDropdown');
+            const searchInput = document.getElementById('categorySearch');
+
+            selectBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isHidden = dropdown.classList.contains('hidden');
+                closeAllFilterDropdowns();
+                if (isHidden) {
+                    dropdown.classList.remove('hidden');
+                    renderCategoryList();
+                    searchInput.focus();
+                }
+            });
+
+            searchInput.addEventListener('input', function(e) {
+                renderCategoryList(e.target.value);
+            });
+
+            dropdown.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+
+        function renderCategoryList(searchTerm = '') {
+            const container = document.getElementById('categoryList');
+            const filtered = filterState.allCategories.filter(item =>
+                item.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            const allOption = '<div class="px-3 py-2 hover:bg-gray-100 cursor-pointer" onclick="selectCategory(null)">全て</div>';
+            const itemsHtml = filtered.map(item => `
+                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer ${filterState.selectedCategory === item.id ? 'bg-primary-50 text-primary-700' : ''}" onclick="selectCategory(${item.id})">
+                    ${item.title}
+                </div>
+            `).join('');
+
+            container.innerHTML = allOption + itemsHtml;
+        }
+
+        function selectCategory(id) {
+            filterState.selectedCategory = id;
+            const display = document.getElementById('categoryDisplay');
+            if (id === null) {
+                display.textContent = i18n.t('all');
+                display.classList.add('text-gray-500');
+                display.classList.remove('text-gray-900');
+            } else {
+                const selected = filterState.allCategories.find(i => i.id === id);
+                display.textContent = selected.title;
+                display.classList.remove('text-gray-500');
+                display.classList.add('text-gray-900');
+            }
+            document.getElementById('categoryDropdown').classList.add('hidden');
+            // TODO: Apply filter
+        }
+
+        // Global click handler
+        document.addEventListener('click', function(e) {
+            closeAllFilterDropdowns();
+        });
+
         tailwind.config = {
             theme: {
                 extend: {
@@ -209,6 +490,14 @@
     </script>
 </head>
 <body class="bg-gray-50">
+    <!-- Loading Overlay -->
+    <div id="pageLoadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]">
+        <div class="bg-white rounded-lg p-8 flex flex-col items-center gap-4">
+            <div class="animate-spin rounded-full h-12 w-12 border-4 border-primary-600 border-t-transparent"></div>
+            <p class="text-gray-700 font-medium" data-i18n="loadingData">データ取得中...</p>
+        </div>
+    </div>
+
     <!-- Sidebar Container -->
     <div id="sidebar-container"></div>
     <script src="i18n.js"></script>
@@ -244,25 +533,69 @@
                     </div>
 
                     <!-- Filter Options -->
-                    <div class="border-t border-gray-200 pt-4">
+                    <div class="border-t border-gray-200 pt-4">  
                         <div class="grid grid-cols-3 gap-4">
+                            <!-- Industry Filter -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="selectIndustry"></label>
-                                <select id="industrySelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
-                                    <option value="" data-i18n="allIndustries"></option>
-                                </select>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="selectIndustryFilter">1. 業界を選択</label>
+                                <div class="relative" id="industrySelectContainer">
+                                    <button type="button" id="industrySelectBtn" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary-600 flex items-center justify-between">
+                                        <span id="industryDisplay" class="text-gray-500" data-i18n="all">全て</span>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div id="industryDropdown" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[300px] overflow-hidden flex flex-col">
+                                        <div class="p-2 border-b border-gray-200">
+                                            <input type="text" id="industrySearch" placeholder="検索..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                        </div>
+                                        <div id="industryList" class="overflow-y-auto text-sm">
+                                            <!-- Items will be rendered here -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Job Type Filter -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="selectRole"></label>
-                                <select id="roleSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
-                                    <option value="" data-i18n="allRoles"></option>
-                                </select>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="selectJobTypeFilter">2. 職種を選択</label>
+                                <div class="relative" id="jobTypeSelectContainer">
+                                    <button type="button" id="jobTypeSelectBtn" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary-600 flex items-center justify-between">
+                                        <span id="jobTypeDisplay" class="text-gray-500" data-i18n="all">全て</span>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div id="jobTypeDropdown" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[300px] overflow-hidden flex flex-col">
+                                        <div class="p-2 border-b border-gray-200">
+                                            <input type="text" id="jobTypeSearch" placeholder="検索..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                        </div>
+                                        <div id="jobTypeList" class="overflow-y-auto text-sm">
+                                            <!-- Items will be rendered here -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- Category Filter -->
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="selectHireType"></label>
-                                <select id="hireTypeSelect" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
-                                    <option value="" data-i18n="all"></option>
-                                </select>
+                                <label class="block text-sm font-medium text-gray-700 mb-1" data-i18n="selectRecruitmentTypeFilter">3. 採用区分を選択</label>
+                                <div class="relative" id="categorySelectContainer">
+                                    <button type="button" id="categorySelectBtn" class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary-600 flex items-center justify-between">
+                                        <span id="categoryDisplay" class="text-gray-500" data-i18n="all">全て</span>
+                                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div id="categoryDropdown" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[300px] overflow-hidden flex flex-col">
+                                        <div class="p-2 border-b border-gray-200">
+                                            <input type="text" id="categorySearch" placeholder="検索..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600">
+                                        </div>
+                                        <div id="categoryList" class="overflow-y-auto text-sm">
+                                            <!-- Items will be rendered here -->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -304,16 +637,16 @@
             icon.classList.toggle('rotate-180');
         }
 
-        // Initialize controls as collapsed and fetch data
-        document.addEventListener('DOMContentLoaded', function() {
+        // Initialize controls as expanded and fetch data
+        document.addEventListener('DOMContentLoaded', async function() {
             const controlsSection = document.getElementById('controlsSection');
-            controlsSection.classList.add('hidden');
-            document.getElementById('controlsToggleIcon').classList.add('rotate-180');
+            // controlsSection.classList.add('hidden'); // Removed to keep it open by default
+            // document.getElementById('controlsToggleIcon').classList.add('rotate-180'); // Removed to keep icon in default state
 
-            // Populate filter options (fixed data)
-            populateFilterSelects();
+            // Initialize filters with loading overlay
+            await initializeFilters();
 
-            // Simulate fetching data with 0.5s delay
+            // Render templates after filters loaded
             const headerText = document.getElementById('templatesHeaderText');
             headerText.textContent = '読み込み中...';
             setTimeout(() => {
