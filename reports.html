@@ -35,6 +35,16 @@
     <script src="i18n.js"></script>
     <script src="sidebar.js"></script>
 
+    <!-- Success Notification -->
+    <div id="successNotification" class="hidden fixed top-4 right-4 z-50">
+        <div class="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span id="notificationMessage" data-i18n="evaluationSaved"></span>
+        </div>
+    </div>
+
     <!-- Interview Detail Modal -->
     <div id="interviewModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-4">
@@ -131,18 +141,31 @@
 
                 <!-- Tab Content: Overall Evaluation -->
                 <div id="tab-evaluation" class="tab-content hidden">
+                    <!-- Edit Button -->
+                    <div class="flex justify-end mb-4">
+                        <button id="editEvaluationBtn" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm font-medium" data-i18n="edit">
+                        </button>
+                        <div id="editActions" class="hidden gap-2">
+                            <button id="saveEvaluationBtn" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium" data-i18n="save">
+                            </button>
+                            <button id="cancelEvaluationBtn" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 text-sm font-medium" data-i18n="cancel">
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Overall Text -->
                     <div class="bg-gray-50 rounded-lg p-4 mb-6">
                         <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="overallEvaluationText"></h4>
-                        <p class="text-sm text-gray-700 leading-relaxed">
+                        <p id="overallEvalText" class="text-sm text-gray-700 leading-relaxed">
                             非常に優秀な候補者です。明るく元気な接客態度で、お客様とのコミュニケーション能力が高いです。小売業での経験も豊富で、即戦力として活躍できる人材です。
                         </p>
+                        <textarea id="overallEvalInput" class="hidden w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600" rows="4">非常に優秀な候補者です。明るく元気な接客態度で、お客様とのコミュニケーション能力が高いです。小売業での経験も豊富で、即戦力として活躍できる人材です。</textarea>
                     </div>
 
                     <!-- Strengths -->
                     <div class="bg-gray-50 rounded-lg p-4 mb-6">
                         <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="strengths"></h4>
-                        <ul class="space-y-2">
+                        <ul id="strengthsList" class="space-y-2">
                             <li class="flex items-start gap-2 text-sm text-gray-700">
                                 <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
@@ -174,12 +197,21 @@
                                 <span>チームワークを大切にする姿勢</span>
                             </li>
                         </ul>
+                        <div id="strengthsEdit" class="hidden space-y-2">
+                            <div id="strengthsInputContainer" class="space-y-2"></div>
+                            <button id="addStrengthBtn" class="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <span data-i18n="addItem"></span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Concerns -->
                     <div class="bg-gray-50 rounded-lg p-4 mb-6">
                         <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="concerns"></h4>
-                        <ul class="space-y-2">
+                        <ul id="concernsList" class="space-y-2">
                             <li class="flex items-start gap-2 text-sm text-gray-700">
                                 <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
@@ -193,14 +225,24 @@
                                 <span>医薬品知識が限定的</span>
                             </li>
                         </ul>
+                        <div id="concernsEdit" class="hidden space-y-2">
+                            <div id="concernsInputContainer" class="space-y-2"></div>
+                            <button id="addConcernBtn" class="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                </svg>
+                                <span data-i18n="addItem"></span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Recommendation -->
                     <div class="bg-primary-50 rounded-lg p-4">
                         <h4 class="text-base font-semibold text-gray-900 mb-3" data-i18n="recommendation"></h4>
-                        <p class="text-sm text-gray-700 leading-relaxed">
+                        <p id="recommendationText" class="text-sm text-gray-700 leading-relaxed">
                             強く推薦します。接客スキルが高く、チームに良い影響を与えられる人材です。
                         </p>
+                        <textarea id="recommendationInput" class="hidden w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600" rows="3">強く推薦します。接客スキルが高く、チームに良い影響を与えられる人材です。</textarea>
                     </div>
                 </div>
 
@@ -609,6 +651,238 @@
                     document.getElementById(`tab-${tabName}`).classList.remove('hidden');
                 });
             });
+
+            // Edit Overall Evaluation functionality
+            initializeEvaluationEdit();
+        }
+
+        // Initialize evaluation edit functionality
+        function initializeEvaluationEdit() {
+            const editBtn = document.getElementById('editEvaluationBtn');
+            const saveBtn = document.getElementById('saveEvaluationBtn');
+            const cancelBtn = document.getElementById('cancelEvaluationBtn');
+            const editActions = document.getElementById('editActions');
+
+            // Overall evaluation elements
+            const overallEvalText = document.getElementById('overallEvalText');
+            const overallEvalInput = document.getElementById('overallEvalInput');
+
+            // Strengths elements
+            const strengthsList = document.getElementById('strengthsList');
+            const strengthsEdit = document.getElementById('strengthsEdit');
+            const strengthsInputContainer = document.getElementById('strengthsInputContainer');
+            const addStrengthBtn = document.getElementById('addStrengthBtn');
+
+            // Concerns elements
+            const concernsList = document.getElementById('concernsList');
+            const concernsEdit = document.getElementById('concernsEdit');
+            const concernsInputContainer = document.getElementById('concernsInputContainer');
+            const addConcernBtn = document.getElementById('addConcernBtn');
+
+            // Recommendation elements
+            const recommendationText = document.getElementById('recommendationText');
+            const recommendationInput = document.getElementById('recommendationInput');
+
+            let strengthsData = [];
+            let concernsData = [];
+
+            // Edit button click
+            editBtn.addEventListener('click', function() {
+                // Toggle to edit mode
+                editBtn.classList.add('hidden');
+                editActions.classList.remove('hidden');
+                editActions.classList.add('flex');
+
+                // Overall evaluation
+                overallEvalText.classList.add('hidden');
+                overallEvalInput.classList.remove('hidden');
+
+                // Strengths
+                strengthsList.classList.add('hidden');
+                strengthsEdit.classList.remove('hidden');
+                loadStrengthsToEdit();
+
+                // Concerns
+                concernsList.classList.add('hidden');
+                concernsEdit.classList.remove('hidden');
+                loadConcernsToEdit();
+
+                // Recommendation
+                recommendationText.classList.add('hidden');
+                recommendationInput.classList.remove('hidden');
+            });
+
+            // Save button click
+            saveBtn.addEventListener('click', function() {
+                // Save overall evaluation
+                overallEvalText.textContent = overallEvalInput.value;
+
+                // Save strengths
+                saveStrengths();
+
+                // Save concerns
+                saveConcerns();
+
+                // Save recommendation
+                recommendationText.textContent = recommendationInput.value;
+
+                // Exit edit mode
+                exitEditMode();
+
+                // Show success notification
+                showNotification();
+            });
+
+            // Cancel button click
+            cancelBtn.addEventListener('click', function() {
+                // Restore original values
+                overallEvalInput.value = overallEvalText.textContent.trim();
+                recommendationInput.value = recommendationText.textContent.trim();
+
+                // Exit edit mode
+                exitEditMode();
+            });
+
+            // Add strength button
+            addStrengthBtn.addEventListener('click', function() {
+                addStrengthInput('');
+            });
+
+            // Add concern button
+            addConcernBtn.addEventListener('click', function() {
+                addConcernInput('');
+            });
+
+            function exitEditMode() {
+                editBtn.classList.remove('hidden');
+                editActions.classList.add('hidden');
+                editActions.classList.remove('flex');
+
+                overallEvalText.classList.remove('hidden');
+                overallEvalInput.classList.add('hidden');
+
+                strengthsList.classList.remove('hidden');
+                strengthsEdit.classList.add('hidden');
+
+                concernsList.classList.remove('hidden');
+                concernsEdit.classList.add('hidden');
+
+                recommendationText.classList.remove('hidden');
+                recommendationInput.classList.add('hidden');
+            }
+
+            function loadStrengthsToEdit() {
+                strengthsInputContainer.innerHTML = '';
+                strengthsData = [];
+
+                const items = strengthsList.querySelectorAll('li span');
+                items.forEach(item => {
+                    const text = item.textContent;
+                    strengthsData.push(text);
+                    addStrengthInput(text);
+                });
+            }
+
+            function addStrengthInput(value) {
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'flex items-center gap-2';
+                inputGroup.innerHTML = `
+                    <input type="text" value="${value}" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="${i18n.t('strengthPlaceholder')}">
+                    <button class="remove-strength-btn text-red-600 hover:text-red-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </button>
+                `;
+                strengthsInputContainer.appendChild(inputGroup);
+
+                // Add remove functionality
+                inputGroup.querySelector('.remove-strength-btn').addEventListener('click', function() {
+                    inputGroup.remove();
+                });
+            }
+
+            function saveStrengths() {
+                const inputs = strengthsInputContainer.querySelectorAll('input');
+                strengthsList.innerHTML = '';
+
+                inputs.forEach(input => {
+                    const value = input.value.trim();
+                    if (value) {
+                        const li = document.createElement('li');
+                        li.className = 'flex items-start gap-2 text-sm text-gray-700';
+                        li.innerHTML = `
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>${value}</span>
+                        `;
+                        strengthsList.appendChild(li);
+                    }
+                });
+            }
+
+            function loadConcernsToEdit() {
+                concernsInputContainer.innerHTML = '';
+                concernsData = [];
+
+                const items = concernsList.querySelectorAll('li span');
+                items.forEach(item => {
+                    const text = item.textContent;
+                    concernsData.push(text);
+                    addConcernInput(text);
+                });
+            }
+
+            function addConcernInput(value) {
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'flex items-center gap-2';
+                inputGroup.innerHTML = `
+                    <input type="text" value="${value}" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="${i18n.t('concernPlaceholder')}">
+                    <button class="remove-concern-btn text-red-600 hover:text-red-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                        </svg>
+                    </button>
+                `;
+                concernsInputContainer.appendChild(inputGroup);
+
+                // Add remove functionality
+                inputGroup.querySelector('.remove-concern-btn').addEventListener('click', function() {
+                    inputGroup.remove();
+                });
+            }
+
+            function saveConcerns() {
+                const inputs = concernsInputContainer.querySelectorAll('input');
+                concernsList.innerHTML = '';
+
+                inputs.forEach(input => {
+                    const value = input.value.trim();
+                    if (value) {
+                        const li = document.createElement('li');
+                        li.className = 'flex items-start gap-2 text-sm text-gray-700';
+                        li.innerHTML = `
+                            <svg class="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>${value}</span>
+                        `;
+                        concernsList.appendChild(li);
+                    }
+                });
+            }
+        }
+
+        // Show notification function
+        function showNotification() {
+            const notification = document.getElementById('successNotification');
+            notification.classList.remove('hidden');
+
+            // Auto hide after 3 seconds with fade out animation
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
         }
     </script>
 </body>

@@ -140,6 +140,11 @@ const translations = {
         validationQuestionsRequired: 'すべての質問を入力してください',
         dataStructureCorrect: 'データ構造は正しいです。API実装後に保存されます。\n\nConsoleを確認してください。',
         saveFailed: '保存に失敗しました',
+        saveSuccess: '保存しました',
+        evaluationSaved: '評価が正常に保存されました',
+        addItem: '項目を追加',
+        strengthPlaceholder: '強みを入力',
+        concernPlaceholder: '懸念点を入力',
 
         // Questions List Page Filters
         selectIndustryFilter: '1. 業界を選択',
@@ -428,6 +433,11 @@ const translations = {
         validationQuestionsRequired: 'Please fill in all questions',
         dataStructureCorrect: 'Data structure is correct. Will be saved after API implementation.\n\nCheck the console.',
         saveFailed: 'Failed to save',
+        saveSuccess: 'Saved successfully',
+        evaluationSaved: 'Evaluation saved successfully',
+        addItem: 'Add Item',
+        strengthPlaceholder: 'Enter strength',
+        concernPlaceholder: 'Enter concern',
 
         // Questions List Page Filters
         selectIndustryFilter: '1. Select Industry',
