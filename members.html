@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>メンバー管理</title>
+    <title data-i18n="memberManagement">メンバー管理</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles.css">
     <script>
@@ -35,310 +35,1040 @@
     <script src="i18n.js"></script>
     <script src="sidebar.js"></script>
 
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 flex flex-col items-center gap-4">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            <p class="text-gray-700" data-i18n="loadingData"></p>
+        </div>
+    </div>
+
+    <!-- Edit Member Modal -->
+    <div id="editMemberModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900" data-i18n="editMember">メンバーを編集</h2>
+                    <p class="text-sm text-gray-500 mt-1" data-i18n="editMemberDesc">メンバー情報を編集します</p>
+                </div>
+                <button id="closeEditModalBtn" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <form id="editMemberForm" class="p-6 space-y-4">
+                <!-- Email Input (Read-only) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="emailAddressLabel">メールアドレス</label>
+                    <input type="email" id="editMemberEmail" readonly class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed">
+                </div>
+
+                <!-- Permission Select -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="permissionsLabel">権限</label>
+                    <div class="relative">
+                        <button type="button" id="editPermissionSelectBtn" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary-600 flex items-center justify-between">
+                            <span id="editPermissionDisplay" class="text-gray-900" data-i18n="member">メンバー</span>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="editPermissionDropdown" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[200px] overflow-hidden">
+                            <div id="editPermissionList" class="overflow-y-auto text-sm">
+                                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer" data-value="admin" data-i18n="admin">管理者</div>
+                                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer" data-value="manager" data-i18n="manager">マネージャー</div>
+                                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer bg-primary-600 text-white" data-value="member" data-i18n="member">メンバー</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group Select -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="groupLabel">グループ</label>
+                    <div class="relative">
+                        <button type="button" id="editGroupSelectBtn" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary-600 flex items-center justify-between">
+                            <span id="editGroupDisplay" class="text-gray-900" data-i18n="hrDepartment">人事部</span>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="editGroupDropdown" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[300px] overflow-hidden">
+                            <!-- Search Box -->
+                            <div class="p-2 border-b border-gray-200">
+                                <div class="relative">
+                                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                    <input type="text" id="editGroupSearchInput" data-i18n-placeholder="searchGroupPlaceholder" placeholder="グループを検索..." class="w-full pl-9 pr-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                                </div>
+                            </div>
+                            <!-- Loading State -->
+                            <div id="editGroupLoadingState" class="flex items-center justify-center py-8">
+                                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+                            </div>
+                            <!-- Groups List -->
+                            <div id="editGroupList" class="hidden overflow-y-auto text-sm max-h-[200px]">
+                                <!-- Groups will be populated here -->
+                            </div>
+                            <!-- No Results -->
+                            <div id="editGroupNoResults" class="hidden px-3 py-4 text-sm text-gray-500 text-center" data-i18n="noGroupsFound">グループが見つかりません</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center gap-3 pt-4">
+                    <button type="button" id="cancelEditBtn" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition" data-i18n="cancel">キャンセル</button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition" data-i18n="saveChanges">変更を保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Member Modal -->
+    <div id="addMemberModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-md mx-4">
+            <!-- Modal Header -->
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-900" data-i18n="inviteNewMember">新しいメンバーを招待</h2>
+                    <p class="text-sm text-gray-500 mt-1" data-i18n="inviteNewMemberDesc">メールアドレスを入力してチームメンバーを招待します</p>
+                </div>
+                <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Modal Content -->
+            <form id="addMemberForm" class="p-6 space-y-4">
+                <!-- Email Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="emailAddressLabel">メールアドレス</label>
+                    <input type="email" id="memberEmail" required placeholder="example@company.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                </div>
+
+                <!-- Password Input -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="passwordLabel">パスワード</label>
+                    <input type="password" id="memberPassword" required minlength="6" data-i18n-placeholder="passwordPlaceholder" placeholder="最低6文字" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                    <p id="passwordError" class="hidden text-xs text-red-600 mt-1" data-i18n="passwordMinLength">パスワードは最低6文字必要です</p>
+                </div>
+
+                <!-- Permission Select -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="permissionsLabel">権限</label>
+                    <div class="relative">
+                        <button type="button" id="permissionSelectBtn" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary-600 flex items-center justify-between">
+                            <span id="permissionDisplay" class="text-gray-900" data-i18n="member">メンバー</span>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="permissionDropdown" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[200px] overflow-hidden">
+                            <div id="permissionList" class="overflow-y-auto text-sm">
+                                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer" data-value="admin" data-i18n="admin">管理者</div>
+                                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer" data-value="manager" data-i18n="manager">マネージャー</div>
+                                <div class="px-3 py-2 hover:bg-gray-100 cursor-pointer bg-primary-600 text-white" data-value="member" data-i18n="member">メンバー</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Group Select -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" data-i18n="groupLabel">グループ</label>
+                    <div class="relative">
+                        <button type="button" id="groupSelectBtn" class="w-full px-3 py-2 border border-gray-300 rounded-lg bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary-600 flex items-center justify-between">
+                            <span id="groupDisplay" class="text-gray-900" data-i18n="hrDepartment">人事部</span>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div id="groupDropdown" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[300px] overflow-hidden">
+                            <!-- Search Box -->
+                            <div class="p-2 border-b border-gray-200">
+                                <div class="relative">
+                                    <svg class="w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                    <input type="text" id="groupSearchInput" data-i18n-placeholder="searchGroupPlaceholder" placeholder="グループを検索..." class="w-full pl-9 pr-3 py-1.5 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
+                                </div>
+                            </div>
+                            <!-- Loading State -->
+                            <div id="groupLoadingState" class="flex items-center justify-center py-8">
+                                <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary-600"></div>
+                            </div>
+                            <!-- Groups List -->
+                            <div id="groupList" class="hidden overflow-y-auto text-sm max-h-[200px]">
+                                <!-- Groups will be populated here -->
+                            </div>
+                            <!-- No Results -->
+                            <div id="groupNoResults" class="hidden px-3 py-4 text-sm text-gray-500 text-center" data-i18n="noGroupsFound">グループが見つかりません</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex items-center gap-3 pt-4">
+                    <button type="button" id="cancelBtn" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition" data-i18n="cancel">キャンセル</button>
+                    <button type="submit" class="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition" data-i18n="sendInvitation">招待を送信</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- Main Content -->
     <main class="ml-60 min-h-screen">
         <header class="bg-white border-b border-gray-200 px-8 py-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-2xl font-semibold text-gray-900">メンバー管理</h1>
-                    <p class="text-sm text-gray-500 mt-1">チームメンバーの招待と権限管理</p>
-                </div>
-                <button class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    メンバーを招待
-                </button>
+            <div>
+                <h1 class="text-2xl font-semibold text-gray-900" data-i18n="memberManagement">メンバー管理</h1>
+                <p class="text-sm text-gray-500 mt-1" data-i18n="memberManagementDesc">チームメンバーの追加、編集、権限管理を行います</p>
             </div>
         </header>
 
         <div class="p-8">
             <!-- Stats -->
-            <div class="grid grid-cols-4 gap-6 mb-8">
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                <!-- Total Members -->
                 <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500">総メンバー数</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">12</p>
-                        </div>
-                        <div class="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
-                            </svg>
-                        </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-600" data-i18n="totalMembers">総メンバー数</p>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
                     </div>
+                    <p class="text-4xl font-bold text-gray-900" id="totalMembersCount">4</p>
+                    <p class="text-xs text-gray-500 mt-1"><span data-i18n="activeMembers">アクティブ</span>: <span id="activeMembersCount">3</span></p>
                 </div>
 
+                <!-- Admins -->
                 <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500">管理者</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">3</p>
-                        </div>
-                        <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                            </svg>
-                        </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-600" data-i18n="administrators">管理者</p>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                        </svg>
                     </div>
+                    <p class="text-4xl font-bold text-gray-900" id="adminCount">1</p>
+                    <p class="text-xs text-gray-500 mt-1"><span data-i18n="managers">マネージャー</span>: <span id="managerCount">1</span></p>
                 </div>
 
+                <!-- Pending Invitations -->
                 <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500">一般メンバー</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">7</p>
-                        </div>
-                        <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                            </svg>
-                        </div>
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-600" data-i18n="pendingInvitations">招待中</p>
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                        </svg>
                     </div>
-                </div>
-
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm text-gray-500">招待中</p>
-                            <p class="text-3xl font-bold text-gray-900 mt-2">2</p>
-                        </div>
-                        <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                        </div>
-                    </div>
+                    <p class="text-4xl font-bold text-gray-900" id="pendingCount">1</p>
+                    <p class="text-xs text-gray-500 mt-1" data-i18n="awaitingApproval">承認待ち</p>
                 </div>
             </div>
 
             <!-- Members Table -->
             <div class="bg-white rounded-lg border border-gray-200">
                 <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-                    <h2 class="text-lg font-semibold text-gray-900">メンバー一覧</h2>
-                    <div class="flex items-center gap-3">
-                        <div class="relative">
-                            <input type="text" placeholder="メンバーを検索..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
-                            <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                            </svg>
-                        </div>
-                        <select class="px-4 py-2 border border-gray-300 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-primary-600">
-                            <option>全ての役割</option>
-                            <option>管理者</option>
-                            <option>メンバー</option>
-                            <option>閲覧者</option>
-                        </select>
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-900" data-i18n="membersList">メンバー一覧</h2>
+                        <p class="text-sm text-gray-500 mt-1" data-i18n="membersListDesc">チームメンバーの管理と権限設定</p>
+                    </div>
+                    <button id="addMemberBtn" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                        </svg>
+                        <span data-i18n="addMember">メンバーを追加</span>
+                    </button>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="px-6 py-4 bg-gray-50">
+                    <div class="relative">
+                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                        <input type="text" id="searchInput" data-i18n-placeholder="searchMembersPlaceholder" placeholder="名前、メール、グループで検索..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-transparent">
                     </div>
                 </div>
 
-                <div class="divide-y divide-gray-200">
-                    <!-- Member Item 1 -->
-                    <div class="px-6 py-4 hover:bg-gray-50 transition">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center">
-                                    <span class="text-lg font-semibold text-primary-600">山田</span>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="text-sm font-semibold text-gray-900">山田太郎</h3>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
-                                            オーナー
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-500">yamada@peoplex.example.com</p>
-                                    <p class="text-xs text-gray-400 mt-1">最終ログイン: 2024/10/12 14:32</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="text-right">
-                                    <p class="text-sm font-medium text-gray-900">全社採用グループ</p>
-                                    <p class="text-xs text-gray-500">全権限</p>
-                                </div>
-                                <button class="p-2 hover:bg-gray-100 rounded-lg">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Member Item 2 -->
-                    <div class="px-6 py-4 hover:bg-gray-50 transition">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                    <span class="text-lg font-semibold text-green-600">佐藤</span>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="text-sm font-semibold text-gray-900">佐藤花子</h3>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
-                                            管理者
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-500">sato@peoplex.example.com</p>
-                                    <p class="text-xs text-gray-400 mt-1">最終ログイン: 2024/10/11 16:45</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="text-right">
-                                    <p class="text-sm font-medium text-gray-900">People Agent</p>
-                                    <p class="text-xs text-gray-500">面接管理、レポート閲覧</p>
-                                </div>
-                                <button class="p-2 hover:bg-gray-100 rounded-lg">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Member Item 3 -->
-                    <div class="px-6 py-4 hover:bg-gray-50 transition">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
-                                    <span class="text-lg font-semibold text-orange-600">鈴木</span>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="text-sm font-semibold text-gray-900">鈴木一郎</h3>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-purple-100 text-purple-800">
-                                            管理者
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-500">suzuki@peoplex.example.com</p>
-                                    <p class="text-xs text-gray-400 mt-1">最終ログイン: 2024/10/10 09:12</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="text-right">
-                                    <p class="text-sm font-medium text-gray-900">株式会社People&Design</p>
-                                    <p class="text-xs text-gray-500">求人作成、面接管理</p>
-                                </div>
-                                <button class="p-2 hover:bg-gray-100 rounded-lg">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Member Item 4 -->
-                    <div class="px-6 py-4 hover:bg-gray-50 transition">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
-                                    <span class="text-lg font-semibold text-pink-600">田中</span>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="text-sm font-semibold text-gray-900">田中美咲</h3>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
-                                            メンバー
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-500">tanaka@peoplex.example.com</p>
-                                    <p class="text-xs text-gray-400 mt-1">最終ログイン: 2024/10/12 11:23</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="text-right">
-                                    <p class="text-sm font-medium text-gray-900">全社採用グループ</p>
-                                    <p class="text-xs text-gray-500">レポート閲覧のみ</p>
-                                </div>
-                                <button class="p-2 hover:bg-gray-100 rounded-lg">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Member Item 5 - Pending -->
-                    <div class="px-6 py-4 hover:bg-gray-50 transition bg-yellow-50">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="text-sm font-semibold text-gray-900">高橋健太</h3>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
-                                            招待中
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-500">takahashi@example.com</p>
-                                    <p class="text-xs text-gray-400 mt-1">招待送信日: 2024/10/10</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <button class="px-4 py-2 text-sm text-primary-600 hover:text-primary-700 border border-primary-600 rounded-lg hover:bg-primary-50 transition">
-                                    再送信
-                                </button>
-                                <button class="px-4 py-2 text-sm text-red-600 hover:text-red-700 border border-red-600 rounded-lg hover:bg-red-50 transition">
-                                    キャンセル
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- More members... -->
-                    <div class="px-6 py-4 hover:bg-gray-50 transition">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
-                                    <span class="text-lg font-semibold text-indigo-600">伊藤</span>
-                                </div>
-                                <div>
-                                    <div class="flex items-center gap-2">
-                                        <h3 class="text-sm font-semibold text-gray-900">伊藤直樹</h3>
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
-                                            メンバー
-                                        </span>
-                                    </div>
-                                    <p class="text-sm text-gray-500">ito@peoplex.example.com</p>
-                                    <p class="text-xs text-gray-400 mt-1">最終ログイン: 2024/10/09 13:56</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <div class="text-right">
-                                    <p class="text-sm font-medium text-gray-900">People Agent</p>
-                                    <p class="text-xs text-gray-500">面接管理</p>
-                                </div>
-                                <button class="p-2 hover:bg-gray-100 rounded-lg">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"/>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50 border-b border-gray-200">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="name">名前</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="emailAddress">メールアドレス</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="permissions">権限</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="group">グループ</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="status">ステータス</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" data-i18n="lastActive">最終アクティブ</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="membersTableBody" class="bg-white divide-y divide-gray-200">
+                            <!-- Members will be populated here by JavaScript -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        // Initialize i18n on page load
+        // Sample members data
+        const membersData = [
+            {
+                name: '山田太郎',
+                email: 'yamada@example.com',
+                permission: 'admin',
+                group: 'hrDepartment',
+                status: 'active',
+                lastActive: '2時間前'
+            },
+            {
+                name: '佐藤花子',
+                email: 'sato@example.com',
+                permission: 'manager',
+                group: 'recruitmentTeam',
+                status: 'active',
+                lastActive: '1日前'
+            },
+            {
+                name: '鈴木一郎',
+                email: 'suzuki@example.com',
+                permission: 'member',
+                group: 'recruitmentTeam',
+                status: 'active',
+                lastActive: '3日前'
+            },
+            {
+                name: '田中美咲',
+                email: 'tanaka@example.com',
+                permission: 'member',
+                group: 'hrDepartment',
+                status: 'pending',
+                lastActive: '-'
+            }
+        ];
+
+        let currentMembers = [...membersData];
+
+        // Initialize page
         window.addEventListener('DOMContentLoaded', function() {
+            // Update i18n first for loading text
             i18n.updatePage();
+
+            // Initialize search
+            initializeSearch();
+
+            // Initialize modal
+            initializeModal();
+
+            // Simulate loading data
+            setTimeout(() => {
+                loadMembers();
+                updateStats();
+                hideLoading();
+            }, 1000);
         });
 
         // Update translations when language changes
         window.addEventListener('languageChanged', function() {
             i18n.updatePage();
+            loadMembers(); // Reload to update translated text
         });
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
+
+        function loadMembers(members = currentMembers) {
+            const tbody = document.getElementById('membersTableBody');
+            tbody.innerHTML = '';
+
+            members.forEach(member => {
+                const row = createMemberRow(member);
+                tbody.appendChild(row);
+            });
+        }
+
+        function createMemberRow(member) {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-gray-50';
+
+            const permissionColors = {
+                admin: 'bg-red-100 text-red-800',
+                manager: 'bg-purple-100 text-purple-800',
+                member: 'bg-gray-100 text-gray-800'
+            };
+
+            const statusColors = {
+                active: 'bg-primary-100 text-primary-800',
+                pending: 'bg-gray-100 text-gray-800'
+            };
+
+            tr.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-sm font-medium text-gray-900">${member.name}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-sm text-gray-700">${member.email}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${permissionColors[member.permission]}">
+                        <span data-i18n="${member.permission}">${i18n.t(member.permission)}</span>
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-sm text-gray-700" data-i18n="${member.group}">${i18n.t(member.group)}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusColors[member.status]}">
+                        <span data-i18n="${member.status}">${i18n.t(member.status)}</span>
+                    </span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <span class="text-sm text-gray-700">${member.lastActive}</span>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-right relative">
+                    <button class="member-actions-btn text-gray-400 hover:text-gray-600" data-member='${JSON.stringify(member)}'>
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"/>
+                        </svg>
+                    </button>
+                    <div class="member-actions-dropdown hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                        <button class="edit-member-btn w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                            </svg>
+                            <span data-i18n="editMember">編集</span>
+                        </button>
+                        <button class="lock-member-btn w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                            <span data-i18n="${member.locked ? 'unlockAccount' : 'lockAccount'}">${member.locked ? 'アカウントのロック解除' : 'アカウントをロック'}</span>
+                        </button>
+                        <button class="reset-password-btn w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center gap-2 border-t border-gray-100">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/>
+                            </svg>
+                            <span data-i18n="resetPassword">パスワードをリセット</span>
+                        </button>
+                    </div>
+                </td>
+            `;
+
+            // Add event listeners for action buttons
+            const actionsBtn = tr.querySelector('.member-actions-btn');
+            const actionsDropdown = tr.querySelector('.member-actions-dropdown');
+            const editBtn = tr.querySelector('.edit-member-btn');
+            const lockBtn = tr.querySelector('.lock-member-btn');
+            const resetBtn = tr.querySelector('.reset-password-btn');
+
+            // Toggle dropdown
+            actionsBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Close all other dropdowns
+                document.querySelectorAll('.member-actions-dropdown').forEach(d => {
+                    if (d !== actionsDropdown) d.classList.add('hidden');
+                });
+                actionsDropdown.classList.toggle('hidden');
+            });
+
+            // Edit member
+            editBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                actionsDropdown.classList.add('hidden');
+                openEditModal(member);
+            });
+
+            // Lock/Unlock account
+            lockBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                actionsDropdown.classList.add('hidden');
+                toggleLockAccount(member);
+            });
+
+            // Reset password
+            resetBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                actionsDropdown.classList.add('hidden');
+                resetMemberPassword(member);
+            });
+
+            return tr;
+        }
+
+        function updateStats() {
+            const totalMembers = membersData.length;
+            const activeMembers = membersData.filter(m => m.status === 'active').length;
+            const admins = membersData.filter(m => m.permission === 'admin').length;
+            const managers = membersData.filter(m => m.permission === 'manager').length;
+            const pending = membersData.filter(m => m.status === 'pending').length;
+
+            document.getElementById('totalMembersCount').textContent = totalMembers;
+            document.getElementById('activeMembersCount').textContent = activeMembers;
+            document.getElementById('adminCount').textContent = admins;
+            document.getElementById('managerCount').textContent = managers;
+            document.getElementById('pendingCount').textContent = pending;
+        }
+
+        function initializeSearch() {
+            const searchInput = document.getElementById('searchInput');
+
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+
+                if (!searchTerm) {
+                    currentMembers = [...membersData];
+                    loadMembers();
+                    return;
+                }
+
+                currentMembers = membersData.filter(member => {
+                    const nameMatch = member.name.toLowerCase().includes(searchTerm);
+                    const emailMatch = member.email.toLowerCase().includes(searchTerm);
+                    const groupMatch = i18n.t(member.group).toLowerCase().includes(searchTerm);
+
+                    return nameMatch || emailMatch || groupMatch;
+                });
+
+                loadMembers();
+            });
+        }
+
+        // Sample groups data (simulating API response)
+        let groupsData = [];
+        let filteredGroups = [];
+
+        // Simulate fetching groups from API
+        function fetchGroups() {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    resolve([
+                        { value: 'hrDepartment', label: 'hrDepartment' },
+                        { value: 'recruitmentTeam', label: 'recruitmentTeam' },
+                        { value: 'engineering', label: 'engineering' },
+                        { value: 'marketing', label: 'marketing' },
+                        { value: 'sales', label: 'sales' },
+                        { value: 'finance', label: 'finance' },
+                        { value: 'operations', label: 'operations' },
+                        { value: 'customerSupport', label: 'customerSupport' }
+                    ]);
+                }, 800); // Simulate 800ms loading time
+            });
+        }
+
+        function initializeModal() {
+            const modal = document.getElementById('addMemberModal');
+            const addMemberBtn = document.getElementById('addMemberBtn');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const form = document.getElementById('addMemberForm');
+
+            let selectedPermission = 'member';
+            let selectedGroup = 'hrDepartment';
+
+            // Open modal
+            addMemberBtn.addEventListener('click', function() {
+                modal.classList.remove('hidden');
+                initializeCustomDropdowns();
+            });
+
+            // Close modal
+            function closeModal() {
+                modal.classList.add('hidden');
+                form.reset();
+                document.getElementById('permissionDropdown').classList.add('hidden');
+                document.getElementById('groupDropdown').classList.add('hidden');
+                // Reset to defaults
+                selectedPermission = 'member';
+                selectedGroup = 'hrDepartment';
+            }
+
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+
+            // Close on backdrop click
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            // Initialize custom dropdowns
+            function initializeCustomDropdowns() {
+                // Permission dropdown
+                const permissionBtn = document.getElementById('permissionSelectBtn');
+                const permissionDropdown = document.getElementById('permissionDropdown');
+                const permissionDisplay = document.getElementById('permissionDisplay');
+
+                permissionBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    permissionDropdown.classList.toggle('hidden');
+                    document.getElementById('groupDropdown').classList.add('hidden');
+                });
+
+                // Permission options click
+                document.querySelectorAll('#permissionList > div').forEach(option => {
+                    option.addEventListener('click', function() {
+                        selectedPermission = this.getAttribute('data-value');
+                        permissionDisplay.textContent = this.textContent;
+
+                        // Update selected state
+                        document.querySelectorAll('#permissionList > div').forEach(opt => {
+                            opt.classList.remove('bg-primary-600', 'text-white');
+                            opt.classList.add('hover:bg-gray-100');
+                        });
+                        this.classList.add('bg-primary-600', 'text-white');
+                        this.classList.remove('hover:bg-gray-100');
+
+                        permissionDropdown.classList.add('hidden');
+                    });
+                });
+
+                // Group dropdown
+                const groupBtn = document.getElementById('groupSelectBtn');
+                const groupDropdown = document.getElementById('groupDropdown');
+                const groupDisplay = document.getElementById('groupDisplay');
+                const groupLoadingState = document.getElementById('groupLoadingState');
+                const groupList = document.getElementById('groupList');
+                const groupSearchInput = document.getElementById('groupSearchInput');
+                const groupNoResults = document.getElementById('groupNoResults');
+
+                let groupsLoaded = false;
+
+                groupBtn.addEventListener('click', async function(e) {
+                    e.stopPropagation();
+                    groupDropdown.classList.toggle('hidden');
+                    document.getElementById('permissionDropdown').classList.add('hidden');
+
+                    // Load groups if not already loaded
+                    if (!groupsLoaded && !groupDropdown.classList.contains('hidden')) {
+                        await loadGroups();
+                    }
+
+                    // Focus search input when dropdown opens
+                    if (!groupDropdown.classList.contains('hidden')) {
+                        setTimeout(() => groupSearchInput.focus(), 100);
+                    }
+                });
+
+                // Load groups function
+                async function loadGroups() {
+                    groupLoadingState.classList.remove('hidden');
+                    groupList.classList.add('hidden');
+                    groupNoResults.classList.add('hidden');
+
+                    try {
+                        groupsData = await fetchGroups();
+                        filteredGroups = [...groupsData];
+                        renderGroups(filteredGroups);
+                        groupsLoaded = true;
+                    } catch (error) {
+                        console.error('Error loading groups:', error);
+                    } finally {
+                        groupLoadingState.classList.add('hidden');
+                        groupList.classList.remove('hidden');
+                    }
+                }
+
+                // Render groups function
+                function renderGroups(groups) {
+                    groupList.innerHTML = '';
+
+                    if (groups.length === 0) {
+                        groupList.classList.add('hidden');
+                        groupNoResults.classList.remove('hidden');
+                        return;
+                    }
+
+                    groupNoResults.classList.add('hidden');
+                    groupList.classList.remove('hidden');
+
+                    groups.forEach((group, index) => {
+                        const option = document.createElement('div');
+                        option.className = 'px-3 py-2 hover:bg-gray-100 cursor-pointer';
+                        option.setAttribute('data-value', group.value);
+                        option.setAttribute('data-i18n', group.label);
+                        option.textContent = i18n.t(group.label);
+
+                        // Mark first item (hrDepartment) as selected by default
+                        if (group.value === selectedGroup) {
+                            option.classList.add('bg-primary-600', 'text-white');
+                            option.classList.remove('hover:bg-gray-100');
+                        }
+
+                        option.addEventListener('click', function() {
+                            selectedGroup = this.getAttribute('data-value');
+                            groupDisplay.textContent = this.textContent;
+
+                            // Update selected state
+                            document.querySelectorAll('#groupList > div').forEach(opt => {
+                                opt.classList.remove('bg-primary-600', 'text-white');
+                                opt.classList.add('hover:bg-gray-100');
+                            });
+                            this.classList.add('bg-primary-600', 'text-white');
+                            this.classList.remove('hover:bg-gray-100');
+
+                            groupDropdown.classList.add('hidden');
+                            groupSearchInput.value = ''; // Clear search
+                            filteredGroups = [...groupsData]; // Reset filter
+                        });
+
+                        groupList.appendChild(option);
+                    });
+                }
+
+                // Search functionality for groups
+                groupSearchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+
+                    if (!searchTerm) {
+                        filteredGroups = [...groupsData];
+                    } else {
+                        filteredGroups = groupsData.filter(group => {
+                            const translatedLabel = i18n.t(group.label).toLowerCase();
+                            return translatedLabel.includes(searchTerm) || group.value.toLowerCase().includes(searchTerm);
+                        });
+                    }
+
+                    renderGroups(filteredGroups);
+                });
+
+                // Prevent dropdown from closing when clicking search input
+                groupSearchInput.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+
+                // Close dropdowns when clicking outside
+                document.addEventListener('click', function() {
+                    permissionDropdown.classList.add('hidden');
+                    groupDropdown.classList.add('hidden');
+                });
+            }
+
+            // Handle form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const email = document.getElementById('memberEmail').value;
+                const password = document.getElementById('memberPassword').value;
+                const passwordError = document.getElementById('passwordError');
+
+                // Validate password length
+                if (password.length < 6) {
+                    passwordError.classList.remove('hidden');
+                    return;
+                } else {
+                    passwordError.classList.add('hidden');
+                }
+
+                // Extract name from email (simple logic)
+                const name = email.split('@')[0];
+
+                // Create new member object
+                const newMember = {
+                    name: name.charAt(0).toUpperCase() + name.slice(1),
+                    email: email,
+                    permission: selectedPermission,
+                    group: selectedGroup,
+                    status: 'pending',
+                    lastActive: '-'
+                };
+
+                // Add to members data
+                membersData.push(newMember);
+                currentMembers = [...membersData];
+
+                // Reload table and update stats
+                loadMembers();
+                updateStats();
+
+                // Close modal and show success message
+                closeModal();
+                showNotification();
+            });
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.member-actions-dropdown').forEach(d => {
+                d.classList.add('hidden');
+            });
+        });
+
+        // Open edit modal function
+        let editingMemberIndex = -1;
+        let editGroupsLoaded = false;
+
+        function openEditModal(member) {
+            const modal = document.getElementById('editMemberModal');
+            const emailInput = document.getElementById('editMemberEmail');
+            const permissionDisplay = document.getElementById('editPermissionDisplay');
+            const groupDisplay = document.getElementById('editGroupDisplay');
+
+            // Find member index
+            editingMemberIndex = membersData.findIndex(m => m.email === member.email);
+
+            // Populate form
+            emailInput.value = member.email;
+            permissionDisplay.textContent = i18n.t(member.permission);
+            permissionDisplay.setAttribute('data-i18n', member.permission);
+            groupDisplay.textContent = i18n.t(member.group);
+            groupDisplay.setAttribute('data-i18n', member.group);
+
+            // Update selected states in dropdowns
+            document.querySelectorAll('#editPermissionList > div').forEach(opt => {
+                opt.classList.remove('bg-primary-600', 'text-white');
+                opt.classList.add('hover:bg-gray-100');
+                if (opt.getAttribute('data-value') === member.permission) {
+                    opt.classList.add('bg-primary-600', 'text-white');
+                    opt.classList.remove('hover:bg-gray-100');
+                }
+            });
+
+            modal.classList.remove('hidden');
+            initializeEditModalDropdowns(member);
+        }
+
+        // Initialize edit modal dropdowns
+        function initializeEditModalDropdowns(member) {
+            const permissionBtn = document.getElementById('editPermissionSelectBtn');
+            const permissionDropdown = document.getElementById('editPermissionDropdown');
+            const permissionDisplay = document.getElementById('editPermissionDisplay');
+
+            let selectedPermission = member.permission;
+            let selectedGroup = member.group;
+
+            // Permission dropdown click
+            permissionBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                permissionDropdown.classList.toggle('hidden');
+                document.getElementById('editGroupDropdown').classList.add('hidden');
+            });
+
+            // Permission options click
+            document.querySelectorAll('#editPermissionList > div').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectedPermission = this.getAttribute('data-value');
+                    permissionDisplay.textContent = this.textContent;
+                    permissionDisplay.setAttribute('data-i18n', selectedPermission);
+
+                    // Update selected state
+                    document.querySelectorAll('#editPermissionList > div').forEach(opt => {
+                        opt.classList.remove('bg-primary-600', 'text-white');
+                        opt.classList.add('hover:bg-gray-100');
+                    });
+                    this.classList.add('bg-primary-600', 'text-white');
+                    this.classList.remove('hover:bg-gray-100');
+
+                    permissionDropdown.classList.add('hidden');
+                });
+            });
+
+            // Group dropdown (similar to add modal)
+            const groupBtn = document.getElementById('editGroupSelectBtn');
+            const groupDropdown = document.getElementById('editGroupDropdown');
+            const groupDisplay = document.getElementById('editGroupDisplay');
+            const groupLoadingState = document.getElementById('editGroupLoadingState');
+            const groupList = document.getElementById('editGroupList');
+            const groupSearchInput = document.getElementById('editGroupSearchInput');
+            const groupNoResults = document.getElementById('editGroupNoResults');
+
+            groupBtn.addEventListener('click', async function(e) {
+                e.stopPropagation();
+                groupDropdown.classList.toggle('hidden');
+                document.getElementById('editPermissionDropdown').classList.add('hidden');
+
+                if (!editGroupsLoaded && !groupDropdown.classList.contains('hidden')) {
+                    await loadEditGroups();
+                }
+
+                if (!groupDropdown.classList.contains('hidden')) {
+                    setTimeout(() => groupSearchInput.focus(), 100);
+                }
+            });
+
+            async function loadEditGroups() {
+                groupLoadingState.classList.remove('hidden');
+                groupList.classList.add('hidden');
+                groupNoResults.classList.add('hidden');
+
+                try {
+                    const groups = await fetchGroups();
+                    renderEditGroups(groups, selectedGroup);
+                    editGroupsLoaded = true;
+                } catch (error) {
+                    console.error('Error loading groups:', error);
+                } finally {
+                    groupLoadingState.classList.add('hidden');
+                    groupList.classList.remove('hidden');
+                }
+            }
+
+            function renderEditGroups(groups, currentSelected) {
+                groupList.innerHTML = '';
+                let filteredEditGroups = [...groups];
+
+                if (groups.length === 0) {
+                    groupList.classList.add('hidden');
+                    groupNoResults.classList.remove('hidden');
+                    return;
+                }
+
+                groupNoResults.classList.add('hidden');
+                groupList.classList.remove('hidden');
+
+                groups.forEach(group => {
+                    const option = document.createElement('div');
+                    option.className = 'px-3 py-2 hover:bg-gray-100 cursor-pointer';
+                    option.setAttribute('data-value', group.value);
+                    option.setAttribute('data-i18n', group.label);
+                    option.textContent = i18n.t(group.label);
+
+                    if (group.value === currentSelected) {
+                        option.classList.add('bg-primary-600', 'text-white');
+                        option.classList.remove('hover:bg-gray-100');
+                    }
+
+                    option.addEventListener('click', function() {
+                        selectedGroup = this.getAttribute('data-value');
+                        groupDisplay.textContent = this.textContent;
+                        groupDisplay.setAttribute('data-i18n', selectedGroup);
+
+                        document.querySelectorAll('#editGroupList > div').forEach(opt => {
+                            opt.classList.remove('bg-primary-600', 'text-white');
+                            opt.classList.add('hover:bg-gray-100');
+                        });
+                        this.classList.add('bg-primary-600', 'text-white');
+                        this.classList.remove('hover:bg-gray-100');
+
+                        groupDropdown.classList.add('hidden');
+                        groupSearchInput.value = '';
+                    });
+
+                    groupList.appendChild(option);
+                });
+
+                // Search functionality
+                groupSearchInput.addEventListener('input', function(e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    if (!searchTerm) {
+                        filteredEditGroups = [...groups];
+                    } else {
+                        filteredEditGroups = groups.filter(g => {
+                            const translatedLabel = i18n.t(g.label).toLowerCase();
+                            return translatedLabel.includes(searchTerm) || g.value.toLowerCase().includes(searchTerm);
+                        });
+                    }
+                    renderEditGroups(filteredEditGroups, selectedGroup);
+                });
+            }
+
+            groupSearchInput.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // Handle form submission
+            const editForm = document.getElementById('editMemberForm');
+            editForm.onsubmit = function(e) {
+                e.preventDefault();
+
+                if (editingMemberIndex >= 0) {
+                    membersData[editingMemberIndex].permission = selectedPermission;
+                    membersData[editingMemberIndex].group = selectedGroup;
+                    currentMembers = [...membersData];
+
+                    loadMembers();
+                    closeEditModal();
+                    showNotification('memberUpdated');
+                }
+            };
+
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', function() {
+                permissionDropdown.classList.add('hidden');
+                groupDropdown.classList.add('hidden');
+            });
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            const modal = document.getElementById('editMemberModal');
+            modal.classList.add('hidden');
+            document.getElementById('editPermissionDropdown').classList.add('hidden');
+            document.getElementById('editGroupDropdown').classList.add('hidden');
+            editingMemberIndex = -1;
+        }
+
+        document.getElementById('closeEditModalBtn').addEventListener('click', closeEditModal);
+        document.getElementById('cancelEditBtn').addEventListener('click', closeEditModal);
+
+        // Close on backdrop click
+        document.getElementById('editMemberModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEditModal();
+            }
+        });
+
+        // Toggle lock account function
+        function toggleLockAccount(member) {
+            const index = membersData.findIndex(m => m.email === member.email);
+            if (index >= 0) {
+                membersData[index].locked = !membersData[index].locked;
+                currentMembers = [...membersData];
+                loadMembers();
+                const action = membersData[index].locked ? 'locked' : 'unlocked';
+                showNotification(`account${action.charAt(0).toUpperCase() + action.slice(1)}`);
+            }
+        }
+
+        // Reset password function
+        function resetMemberPassword(member) {
+            // Show confirmation or reset logic
+            if (confirm(i18n.t('confirmResetPassword'))) {
+                console.log('Reset password for:', member.email);
+                showNotification('passwordResetSent');
+            }
+        }
+
+        // Show notification function (reuse from reports.html)
+        function showNotification(messageKey = 'invitationSent') {
+            // Create notification element if not exists
+            let notification = document.getElementById('successNotification');
+            if (!notification) {
+                notification = document.createElement('div');
+                notification.id = 'successNotification';
+                notification.className = 'fixed top-4 right-4 z-50';
+                document.body.appendChild(notification);
+            }
+
+            const message = i18n.t(messageKey);
+            notification.innerHTML = `
+                <div class="bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px]">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span>${message}</span>
+                </div>
+            `;
+
+            notification.classList.remove('hidden');
+
+            // Auto hide after 3 seconds
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
     </script>
 </body>
 </html>
