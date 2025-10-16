@@ -632,13 +632,13 @@
 
                 // Validate file type
                 if (!supportedTypes.includes(file.type)) {
-                    showError('サポートされていないファイル形式です。PNG、JPG、またはSVGファイルをアップロードしてください。');
+                    showError(i18n.t('logoUnsupportedFormat'));
                     return;
                 }
 
                 // Validate file size
                 if (file.size > maxFileSize) {
-                    showError('ファイルサイズが大きすぎます。5MB以下のファイルをアップロードしてください。');
+                    showError(i18n.t('logoFileTooLarge'));
                     return;
                 }
 
