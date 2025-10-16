@@ -414,12 +414,45 @@
                         <label class="block text-sm font-medium text-gray-900 mb-3" data-i18n="logoImage">ロゴ画像</label>
 
                         <!-- Upload Area -->
-                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-primary-400 transition cursor-pointer bg-gray-50">
+                        <input type="file" id="logoUpload" accept=".png,.jpg,.jpeg,.svg" class="hidden">
+                        <div id="uploadArea" class="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center hover:border-primary-400 transition cursor-pointer bg-gray-50">
                             <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
                             </svg>
                             <p class="text-gray-900 font-medium mb-1" data-i18n="clickToUploadLogo">クリックしてロゴをアップロード</p>
                             <p class="text-sm text-gray-500" data-i18n="logoFormats">PNG, JPG, SVG対応</p>
+                        </div>
+
+                        <!-- Preview Area -->
+                        <div id="logoPreview" class="hidden mt-6 border-2 border-gray-200 rounded-lg p-6 bg-white">
+                            <div class="flex items-start gap-4">
+                                <div class="flex-shrink-0">
+                                    <img id="previewImage" src="" alt="Logo Preview" class="max-w-xs max-h-40 object-contain border border-gray-200 rounded-lg">
+                                </div>
+                                <div class="flex-1">
+                                    <div class="flex items-start justify-between">
+                                        <div>
+                                            <p id="fileName" class="text-sm font-semibold text-gray-900 mb-1"></p>
+                                            <p id="fileSize" class="text-xs text-gray-500"></p>
+                                        </div>
+                                        <button id="removeLogoBtn" class="text-red-600 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="logoError" class="hidden mt-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+                            <div class="flex items-start gap-3">
+                                <svg class="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <p id="logoErrorMessage" class="text-sm text-red-800"></p>
+                            </div>
                         </div>
 
                         <p class="text-xs text-gray-500 mt-3" data-i18n="logoSizeNote">推奨サイズ: 幅400px × 高160px以内、背景が透明なPNGまたはSVGファイルを推奨します。</p>
@@ -445,6 +478,7 @@
             i18n.updatePage();
             initializeTabs();
             initializeColorPicker();
+            initializeLogoUpload();
         });
 
         // Update translations when language changes
@@ -526,6 +560,130 @@
                 if (previewLink) {
                     previewLink.style.color = color;
                 }
+            }
+        }
+
+        // Logo upload functionality
+        function initializeLogoUpload() {
+            const logoUpload = document.getElementById('logoUpload');
+            const uploadArea = document.getElementById('uploadArea');
+            const logoPreview = document.getElementById('logoPreview');
+            const previewImage = document.getElementById('previewImage');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeLogoBtn = document.getElementById('removeLogoBtn');
+            const logoError = document.getElementById('logoError');
+            const logoErrorMessage = document.getElementById('logoErrorMessage');
+
+            if (!logoUpload || !uploadArea) return;
+
+            // Supported file types
+            const supportedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'];
+            const maxFileSize = 5 * 1024 * 1024; // 5MB
+
+            // Click on upload area to trigger file input
+            uploadArea.addEventListener('click', function() {
+                logoUpload.click();
+            });
+
+            // Handle file selection
+            logoUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleFileUpload(file);
+                }
+            });
+
+            // Drag and drop support
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.add('border-primary-400', 'bg-primary-50');
+            });
+
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('border-primary-400', 'bg-primary-50');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('border-primary-400', 'bg-primary-50');
+
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    handleFileUpload(file);
+                }
+            });
+
+            // Remove logo button
+            if (removeLogoBtn) {
+                removeLogoBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    resetUpload();
+                });
+            }
+
+            function handleFileUpload(file) {
+                // Hide error message
+                hideError();
+
+                // Validate file type
+                if (!supportedTypes.includes(file.type)) {
+                    showError('サポートされていないファイル形式です。PNG、JPG、またはSVGファイルをアップロードしてください。');
+                    return;
+                }
+
+                // Validate file size
+                if (file.size > maxFileSize) {
+                    showError('ファイルサイズが大きすぎます。5MB以下のファイルをアップロードしてください。');
+                    return;
+                }
+
+                // Read and preview the file
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    fileName.textContent = file.name;
+                    fileSize.textContent = formatFileSize(file.size);
+
+                    // Show preview, hide upload area
+                    logoPreview.classList.remove('hidden');
+                    uploadArea.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+
+            function resetUpload() {
+                logoUpload.value = '';
+                previewImage.src = '';
+                fileName.textContent = '';
+                fileSize.textContent = '';
+
+                // Hide preview, show upload area
+                logoPreview.classList.add('hidden');
+                uploadArea.classList.remove('hidden');
+                hideError();
+            }
+
+            function showError(message) {
+                logoErrorMessage.textContent = message;
+                logoError.classList.remove('hidden');
+            }
+
+            function hideError() {
+                logoError.classList.add('hidden');
+                logoErrorMessage.textContent = '';
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
             }
         }
     </script>
